@@ -1,0 +1,1255 @@
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bezaleel | Design System v2</title>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ASSETS — Same JS/CSS referenced by index.html
+     ═══════════════════════════════════════════════════════════════ -->
+<script src="assets/resource_3fa48481346f.es"></script>
+<script src="assets/iconify-icon_e19829e7f0e8.js"></script>
+<script src="assets/lucide_latest_2eebd0ebe8c2.es"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="assets/css2_b576227558ef.css" rel="stylesheet"/>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     INLINE STYLES — Exact copy from index.html
+     CHANGE: every #FACC15 / #facc15 → #196420
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+  --brand-primary: #196420;
+  --brand-dim: #114516;
+}
+body {
+  background-color: #030303;
+  color: #e5e5e5;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-primary); }
+
+/* --- ANIMATION OPTIMIZATIONS --- */
+@keyframes animationIn {
+  0% { opacity: 0; transform: translate3d(0, 30px, 0); filter: blur(8px); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
+}
+.animate-on-scroll {
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+.animate-on-scroll.animate {
+  animation: animationIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Button & UI Styles */
+.shiny-cta {
+  position: relative;
+  padding: 0.75rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #0A0A0A;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.shiny-cta:hover {
+  border-color: rgba(25, 100, 32, 0.4);
+  box-shadow: 0 0 15px rgba(25, 100, 32, 0.15);
+  transform: translateY(-1px);
+}
+.shiny-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transform: skewX(-20deg);
+  transition: 0.5s;
+  pointer-events: none;
+  z-index: -1;
+}
+.shiny-cta:hover::before { left: 200%; transition: 0.7s; }
+
+.btn-secondary {
+  position: relative;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #a3a3a3;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border-color: rgba(255,255,255,0.15);
+}
+
+.apple-glass-pill {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255,255,255,0.02);
+  border-radius: 9999px;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+.pill-wrapper { position: relative; display: inline-flex; border-radius: 9999px; z-index: 20; }
+.beam-ring {
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  padding: 1px;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 90deg, #196420 180deg, transparent 270deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: beam-spin 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.pill-wrapper:hover .beam-ring { opacity: 1; }
+@keyframes beam-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Service Card */
+.service-card { transition: border-color 0.3s ease, background-color 0.3s ease; }
+.service-card:hover .icon-wrapper iconify-icon {
+  animation: lottie-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  color: #196420;
+}
+@keyframes lottie-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.2) rotate(5deg); }
+  70% { transform: scale(0.9) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Grid & Backgrounds */
+.perspective-grid {
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  pointer-events: none;
+}
+.mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+.card-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Text Glow — #196420 is the brand primary */
+@keyframes text-brand-glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(25, 100, 32, 0.2); color: #196420; }
+  50% { text-shadow: 0 0 20px rgba(25, 100, 32, 0.6); color: #196420; }
+}
+.animate-brand-glow { animation: text-brand-glow 3s ease-in-out infinite; }
+
+/* Process Line Animation */
+.process-line {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(25, 100, 32, 0.5), rgba(255,255,255,0.05));
+  background-size: 100% 200%;
+  animation: flow-line 3s linear infinite;
+}
+@keyframes flow-line {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 200%; }
+}
+
+/* --- INFINITE SCROLL ANIMATION --- */
+@keyframes loop-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+.animate-loop-scroll {
+  animation: loop-scroll 40s linear infinite;
+}
+.animate-loop-scroll-reverse {
+  animation: loop-scroll 45s linear infinite reverse;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM SPECIFIC STYLES
+   ═══════════════════════════════════════════════════════════════ */
+.ds-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.ds-nav-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;
+  height: 56px; display: flex; align-items: center; gap: 2rem;
+  overflow-x: auto;
+}
+.ds-nav a {
+  color: #737373; font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  white-space: nowrap; transition: color 0.2s;
+  text-decoration: none;
+}
+.ds-nav a:hover { color: #fff; }
+.ds-nav a.active { color: #196420; }
+
+.ds-section {
+  padding: 6rem 0 4rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.ds-section-header {
+  display: flex; align-items: center; width: 100%; margin-bottom: 3rem;
+}
+.ds-section-title {
+  font-size: 1.875rem; font-weight: 600; color: #fff;
+  letter-spacing: -0.025em; flex-shrink: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.ds-section-title span { color: #196420; }
+.ds-section-line {
+  height: 1px;
+  background: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  flex-grow: 1; margin: 0 1.5rem;
+}
+.ds-section-number {
+  font-size: 0.75rem; font-weight: 600; color: #525252;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* Typography Table */
+.type-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 2rem;
+}
+.type-row:last-child { border-bottom: none; }
+.type-label {
+  font-size: 0.7rem; font-weight: 700; color: #525252;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  min-width: 120px; flex-shrink: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.type-preview { flex-grow: 1; }
+.type-spec {
+  font-size: 0.65rem; color: #404040; font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.05em; text-align: right; flex-shrink: 0; white-space: nowrap;
+}
+
+/* Color Swatch */
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem;
+}
+.swatch-card {
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+}
+.swatch-block { height: 100px; }
+.swatch-info { padding: 0.875rem 1rem; }
+.swatch-name { font-size: 0.75rem; font-weight: 600; color: #e5e5e5; margin-bottom: 0.25rem; }
+.swatch-hex { font-size: 0.65rem; color: #525252; font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.08em; }
+
+/* Component States Grid */
+.states-grid {
+  display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;
+}
+.state-item {
+  display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+}
+.state-label {
+  font-size: 0.6rem; font-weight: 700; color: #404040;
+  text-transform: uppercase; letter-spacing: 0.15em;
+}
+
+/* Motion Gallery */
+.motion-card {
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 1rem;
+  padding: 2rem;
+  background: rgba(255,255,255,0.02);
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.motion-label {
+  font-size: 0.7rem; font-weight: 600; color: #525252;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.motion-trigger {
+  font-size: 0.6rem; color: #404040; font-style: italic;
+}
+
+/* Layout demo */
+.layout-demo-box {
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.015);
+  min-height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: #525252; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+</style>
+
+<!-- Font links (same as index.html) -->
+<link href="assets/css2_8e191ef32247.css" id="all-fonts-link-font-space-grotesk" rel="stylesheet"/>
+<style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style>
+<link href="assets/css2_86e10c4bcbd4.css" id="all-fonts-link-font-geist" rel="stylesheet"/>
+<style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style>
+
+<!-- Tailwind Config (same as index.html) -->
+<script>
+tailwind.config = {
+  theme: { extend: {} },
+  plugins: [
+    function({ addUtilities }) {
+      const rotateXUtilities = {};
+      const rotateYUtilities = {};
+      const rotateZUtilities = {};
+      const rotateValues = [0, 5, 10, 15, 20, 30, 45, 75];
+      rotateValues.forEach((value) => {
+        rotateXUtilities[`.rotate-x-${value}`] = { '--tw-rotate-x': `${value}deg`, transform: `translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0)) rotateX(var(--tw-rotate-x, 0)) rotateY(var(--tw-rotate-y, 0)) rotateZ(var(--tw-rotate-z, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1))` };
+      });
+      const perspectiveUtilities = {
+        ".perspective-none": { perspective: "none" },
+        ".perspective-dramatic": { perspective: "100px" },
+        ".perspective-near": { perspective: "300px" },
+        ".perspective-normal": { perspective: "500px" },
+        ".perspective-midrange": { perspective: "800px" },
+        ".perspective-distant": { perspective: "1200px" },
+      };
+      const transformStyleUtilities = {
+        ".transform-style-preserve-3d": { "transform-style": "preserve-3d" },
+        ".transform-style-flat": { "transform-style": "flat" },
+      };
+      addUtilities({ ...rotateXUtilities, ...rotateYUtilities, ...rotateZUtilities, ...perspectiveUtilities, ...transformStyleUtilities });
+    }
+  ]
+};
+</script>
+
+<style>
+/* 3D Transform utilities */
+.perspective-none { perspective: none !important; }
+.perspective-dramatic { perspective: 100px !important; }
+.perspective-near { perspective: 300px !important; }
+.perspective-normal { perspective: 500px !important; }
+.perspective-midrange { perspective: 800px !important; }
+.perspective-distant { perspective: 1200px !important; }
+.transform-style-preserve-3d { transform-style: preserve-3d !important; }
+.transform-style-flat { transform-style: flat !important; }
+</style>
+
+<!-- Scroll animation JS -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("animate");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: "0px 0px -5% 0px" });
+  document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+    observer.observe(el);
+  });
+});
+</script>
+</head>
+
+<body class="selection:bg-[#196420] selection:text-white antialiased bg-[#030303]">
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     DESIGN SYSTEM NAVIGATION
+     ═══════════════════════════════════════════════════════════════════════ -->
+<nav class="ds-nav">
+  <div class="ds-nav-inner">
+    <a href="#hero" class="active" style="color:#196420; font-size:0.8rem; font-weight:700;">DS v2</a>
+    <a href="#hero">Hero</a>
+    <a href="#typography">Typography</a>
+    <a href="#colors">Colors</a>
+    <a href="#components">Components</a>
+    <a href="#layout">Layout</a>
+    <a href="#motion">Motion</a>
+    <a href="#icons">Icons</a>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     §0 — HERO (Exact Clone, Text Adapted)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="min-h-screen flex overflow-hidden pt-24 pb-12 relative items-center" id="hero">
+  <div class="absolute inset-0 perspective-grid -z-20"></div>
+  <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-[#196420] opacity-[0.05] blur-[140px] rounded-full -z-10"></div>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 w-full max-w-7xl mr-auto ml-auto pr-6 pl-6 gap-x-12 gap-y-12 items-center">
+    <!-- Left Column: Content -->
+    <div class="lg:col-span-6 flex flex-col justify-center z-10">
+      <div class="mb-8 flex items-center gap-2 animate-on-scroll">
+        <div class="pill-wrapper group">
+          <div class="beam-ring"></div>
+          <div class="apple-glass-pill inline-flex items-center gap-2 px-4 py-2 relative z-10">
+            <svg class="lucide lucide-sparkles w-3.5 h-3.5 text-[#196420]" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+            <span class="text-xs font-medium tracking-wide text-neutral-200 uppercase">Design System v2</span>
+          </div>
+        </div>
+      </div>
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.1] mb-6 animate-on-scroll" style="transition-delay: 100ms;">
+        Documenting<br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-neutral-400">Visual Patterns</span><br/>
+        <span class="text-[#196420] animate-brand-glow">With Precision.</span>
+      </h1>
+      <p class="text-lg text-neutral-400 font-light leading-relaxed max-w-lg mb-10 animate-on-scroll" style="transition-delay: 200ms;">
+        This living document captures every typography style, color, component, layout pattern, and animation used across the Bezaleel design.
+      </p>
+      <div class="flex flex-wrap items-center gap-6 animate-on-scroll" style="transition-delay: 300ms;">
+        <button class="shiny-cta h-[56px] px-8">
+          <span>Explore System</span>
+          <svg class="lucide lucide-arrow-right w-4 h-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </button>
+        <button class="btn-secondary h-[56px] group">
+          <span>Components</span>
+          <svg class="lucide lucide-chevron-down w-4 h-4 group-hover:translate-y-0.5 transition-transform" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Right Column: 3D Element -->
+    <div class="lg:col-span-6 relative h-[400px] lg:h-[550px] flex items-center justify-center z-0 animate-on-scroll" style="transition-delay: 200ms;">
+      <div class="absolute inset-0 border border-white/5 rounded-3xl bg-black/20 backdrop-blur-sm overflow-hidden group">
+        <div class="overflow-hidden w-full h-full relative">
+          <iframe class="contrast-125 opacity-90 absolute top-0 left-0 pointer-events-auto scale-125 translate-x-12 translate-y-12" frameborder="0" loading="lazy" src="https://my.spline.design/nexbotrobotcharacterconcept-f9fb70f64f78f621dac9e33520a8dd0c/" style="width: 100%; height: 100%; filter: hue-rotate(85deg) brightness(0.8) saturate(1.5);"></iframe>
+          <div class="pointer-events-none bg-gradient-to-t from-[#030303] via-transparent to-transparent absolute inset-0"></div>
+          <div class="absolute bottom-0 left-0 w-full border-t border-white/10 bg-black/60 backdrop-blur-md pt-5 pb-5 z-20 flex flex-col justify-center">
+            <p class="text-[10px] uppercase font-medium text-neutral-500 tracking-[0.2em] mb-4 px-6">Trusted by AI innovators</p>
+            <div class="relative w-full overflow-hidden mask-fade-x flex gap-8">
+              <div class="flex items-center gap-8 animate-loop-scroll shrink-0 min-w-full justify-around">
+                <div class="flex items-center gap-8 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-500">
+                  <iconify-icon class="shrink-0" height="20" icon="logos:google"></iconify-icon>
+                  <iconify-icon class="text-white shrink-0" height="20" icon="simple-icons:openai"></iconify-icon>
+                  <iconify-icon class="shrink-0" height="20" icon="logos:microsoft"></iconify-icon>
+                  <iconify-icon class="shrink-0" height="20" icon="logos:stripe"></iconify-icon>
+                  <iconify-icon class="text-white shrink-0" height="20" icon="simple-icons:anthropic"></iconify-icon>
+                  <iconify-icon class="text-white shrink-0" height="18" icon="simple-icons:nvidia"></iconify-icon>
+                  <iconify-icon class="brightness-0 invert shrink-0" height="18" icon="logos:vercel"></iconify-icon>
+                  <iconify-icon class="brightness-0 invert shrink-0" height="18" icon="logos:aws"></iconify-icon>
+                </div>
+              </div>
+              <div aria-hidden="true" class="flex items-center gap-8 animate-loop-scroll shrink-0 min-w-full justify-around">
+                <div class="flex items-center gap-8 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-500">
+                  <iconify-icon class="shrink-0" height="20" icon="logos:google"></iconify-icon>
+                  <iconify-icon class="text-white shrink-0" height="20" icon="simple-icons:openai"></iconify-icon>
+                  <iconify-icon class="shrink-0" height="20" icon="logos:microsoft"></iconify-icon>
+                  <iconify-icon class="shrink-0" height="20" icon="logos:stripe"></iconify-icon>
+                  <iconify-icon class="text-white shrink-0" height="20" icon="simple-icons:anthropic"></iconify-icon>
+                  <iconify-icon class="text-white shrink-0" height="18" icon="simple-icons:nvidia"></iconify-icon>
+                  <iconify-icon class="brightness-0 invert shrink-0" height="18" icon="logos:vercel"></iconify-icon>
+                  <iconify-icon class="brightness-0 invert shrink-0" height="18" icon="logos:aws"></iconify-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     §1 — TYPOGRAPHY
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="ds-section bg-[#030303]" id="typography">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="ds-section-header animate-on-scroll">
+      <h2 class="ds-section-title">Typo<span>graphy</span></h2>
+      <div class="ds-section-line"></div>
+      <span class="ds-section-number">§1</span>
+    </div>
+
+    <!-- Heading 1 -->
+    <div class="type-row animate-on-scroll">
+      <span class="type-label">Heading 1</span>
+      <div class="type-preview">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.1]">Constructing Digital Intelligence</h1>
+      </div>
+      <span class="type-spec">72px / 79px</span>
+    </div>
+
+    <!-- Heading 2 -->
+    <div class="type-row animate-on-scroll" style="transition-delay:50ms">
+      <span class="type-label">Heading 2</span>
+      <div class="type-preview">
+        <h2 class="text-3xl md:text-4xl font-semibold text-white tracking-tight">About <span class="text-[#196420]">Us</span></h2>
+      </div>
+      <span class="type-spec">36px / 40px</span>
+    </div>
+
+    <!-- Heading 3 — Large serif-like -->
+    <div class="type-row animate-on-scroll" style="transition-delay:100ms">
+      <span class="type-label">Heading 3</span>
+      <div class="type-preview">
+        <h3 class="md:text-4xl lg:text-5xl text-3xl font-normal tracking-wide font-[Space_Grotesk] text-white leading-[1.3]">Intelligence is driven by a deep passion</h3>
+      </div>
+      <span class="type-spec">48px / 62px</span>
+    </div>
+
+    <!-- Heading 4 -->
+    <div class="type-row animate-on-scroll" style="transition-delay:150ms">
+      <span class="type-label">Heading 4</span>
+      <div class="type-preview">
+        <h4 class="text-lg font-semibold text-white">Website &amp; App Development</h4>
+      </div>
+      <span class="type-spec">18px / 28px</span>
+    </div>
+
+    <!-- Bold L -->
+    <div class="type-row animate-on-scroll" style="transition-delay:200ms">
+      <span class="type-label">Bold L</span>
+      <div class="type-preview">
+        <span class="text-2xl font-semibold text-white">Z47 — Early Stage VC</span>
+      </div>
+      <span class="type-spec">24px / 32px</span>
+    </div>
+
+    <!-- Bold M -->
+    <div class="type-row animate-on-scroll" style="transition-delay:250ms">
+      <span class="type-label">Bold M</span>
+      <div class="type-preview">
+        <span class="text-lg font-semibold text-white font-[Space_Grotesk]">Bezaleel — San Francisco</span>
+      </div>
+      <span class="type-spec">18px / 28px</span>
+    </div>
+
+    <!-- Bold S -->
+    <div class="type-row animate-on-scroll" style="transition-delay:300ms">
+      <span class="type-label">Bold S</span>
+      <div class="type-preview">
+        <span class="text-sm font-medium text-white">James Sullivan</span>
+      </div>
+      <span class="type-spec">14px / 20px</span>
+    </div>
+
+    <!-- Paragraph (body) -->
+    <div class="type-row animate-on-scroll" style="transition-delay:350ms">
+      <span class="type-label">Paragraph</span>
+      <div class="type-preview">
+        <p class="text-lg text-neutral-400 font-light leading-relaxed max-w-lg">We fuse cutting-edge AI integration with premium web &amp; mobile development. Elevate your business with autonomous systems.</p>
+      </div>
+      <span class="type-spec">18px / 28px</span>
+    </div>
+
+    <!-- Regular M -->
+    <div class="type-row animate-on-scroll" style="transition-delay:400ms">
+      <span class="type-label">Regular M</span>
+      <div class="type-preview">
+        <p class="text-sm text-neutral-400 leading-relaxed">Scalable web and mobile applications built with React, Next.js, and React Native for high performance.</p>
+      </div>
+      <span class="type-spec">14px / 20px</span>
+    </div>
+
+    <!-- Regular S -->
+    <div class="type-row animate-on-scroll" style="transition-delay:450ms">
+      <span class="type-label">Regular S</span>
+      <div class="type-preview">
+        <span class="text-xs text-neutral-500">CTO, TechFlow</span>
+      </div>
+      <span class="type-spec">12px / 16px</span>
+    </div>
+
+    <!-- Gradient Text -->
+    <div class="type-row animate-on-scroll" style="transition-delay:500ms">
+      <span class="type-label">Gradient Text</span>
+      <div class="type-preview">
+        <span class="text-5xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-neutral-400 leading-[1.2]">Digital Intelligence</span>
+      </div>
+      <span class="type-spec">48px / gradient</span>
+    </div>
+
+    <!-- Brand Glow Text -->
+    <div class="type-row animate-on-scroll" style="transition-delay:550ms">
+      <span class="type-label">Brand Glow</span>
+      <div class="type-preview">
+        <span class="text-5xl font-semibold tracking-tight text-[#196420] animate-brand-glow leading-[1.2]">For Future.</span>
+      </div>
+      <span class="type-spec">48px / glow anim</span>
+    </div>
+
+    <!-- Micro Label -->
+    <div class="type-row animate-on-scroll" style="transition-delay:600ms">
+      <span class="type-label">Micro Label</span>
+      <div class="type-preview">
+        <span class="text-[10px] uppercase font-medium text-neutral-500 tracking-[0.2em]">Trusted by AI innovators</span>
+      </div>
+      <span class="type-spec">10px / tracking</span>
+    </div>
+
+    <!-- Nav Label -->
+    <div class="type-row animate-on-scroll" style="transition-delay:650ms">
+      <span class="type-label">Nav / Footer</span>
+      <div class="type-preview">
+        <span class="text-[11px] font-bold uppercase tracking-widest text-neutral-500">Home &nbsp; Agency &nbsp; Expertise &nbsp; Projects</span>
+      </div>
+      <span class="type-spec">11px / uppercase</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     §2 — COLORS & SURFACES
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="ds-section bg-[#030303]" id="colors">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="ds-section-header animate-on-scroll">
+      <h2 class="ds-section-title">Colors & <span>Surfaces</span></h2>
+      <div class="ds-section-line"></div>
+      <span class="ds-section-number">§2</span>
+    </div>
+
+    <!-- Brand Colors -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Brand Palette</h3>
+    <div class="swatch-grid mb-12 animate-on-scroll" style="transition-delay:100ms">
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#196420;"></div>
+        <div class="swatch-info"><div class="swatch-name">Brand Primary</div><div class="swatch-hex">#196420 — var(--brand-primary)</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#114516;"></div>
+        <div class="swatch-info"><div class="swatch-name">Brand Dim</div><div class="swatch-hex">#114516 — var(--brand-dim)</div></div>
+      </div>
+    </div>
+
+    <!-- Neutral Colors -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Neutrals</h3>
+    <div class="swatch-grid mb-12 animate-on-scroll" style="transition-delay:150ms">
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#030303;"></div>
+        <div class="swatch-info"><div class="swatch-name">Page BG</div><div class="swatch-hex">#030303</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#050505;"></div>
+        <div class="swatch-info"><div class="swatch-name">Section BG Alt</div><div class="swatch-hex">#050505</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#0A0A0A;"></div>
+        <div class="swatch-info"><div class="swatch-name">Card BG / Button BG</div><div class="swatch-hex">#0A0A0A</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#171717; border:1px solid rgba(255,255,255,0.05);"></div>
+        <div class="swatch-info"><div class="swatch-name">Neutral 900/30</div><div class="swatch-hex">neutral-900/30</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#e5e5e5;"></div>
+        <div class="swatch-info"><div class="swatch-name">Body Text</div><div class="swatch-hex">#e5e5e5</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#ffffff;"></div>
+        <div class="swatch-info"><div class="swatch-name">Heading White</div><div class="swatch-hex">#ffffff</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#a3a3a3;"></div>
+        <div class="swatch-info"><div class="swatch-name">Secondary Text</div><div class="swatch-hex">#a3a3a3 — neutral-400</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background:#737373;"></div>
+        <div class="swatch-info"><div class="swatch-name">Muted Text</div><div class="swatch-hex">#737373 — neutral-500</div></div>
+      </div>
+    </div>
+
+    <!-- Borders & Surfaces -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Borders, Surfaces & Gradients</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 animate-on-scroll" style="transition-delay:200ms">
+      <!-- Glass Pill -->
+      <div class="rounded-2xl border border-white/5 bg-neutral-900/30 p-6">
+        <div class="mb-4">
+          <div class="pill-wrapper group">
+            <div class="beam-ring"></div>
+            <div class="apple-glass-pill inline-flex items-center gap-2 px-4 py-2 relative z-10">
+              <span class="text-xs font-medium text-neutral-200">Glass Pill + Beam Ring</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-neutral-500">apple-glass-pill + beam-ring<br>backdrop-blur: 12px · border: white/8%</p>
+      </div>
+      <!-- Border white/5 card -->
+      <div class="rounded-2xl border border-white/5 bg-neutral-900/30 p-6">
+        <div class="mb-4 p-4 border border-white/5 rounded-xl bg-[#0A0A0A]">
+          <span class="text-xs text-neutral-400">Standard Card Border</span>
+        </div>
+        <p class="text-xs text-neutral-500">border-white/5 · bg-neutral-900/30<br>hover → border-[#196420]/30</p>
+      </div>
+      <!-- Section Divider -->
+      <div class="rounded-2xl border border-white/5 bg-neutral-900/30 p-6">
+        <div class="mb-4 space-y-4">
+          <div class="h-[1px] bg-gradient-to-r from-white/10 to-white/5"></div>
+          <div class="border-t border-white/10"></div>
+          <div class="border-t border-white/5"></div>
+        </div>
+        <p class="text-xs text-neutral-500">Section dividers<br>Gradient line · white/10 · white/5</p>
+      </div>
+    </div>
+
+    <!-- Gradients -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Gradients</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-on-scroll" style="transition-delay:250ms">
+      <div class="swatch-card">
+        <div class="swatch-block bg-gradient-to-r from-white via-white to-neutral-400"></div>
+        <div class="swatch-info"><div class="swatch-name">Text Gradient</div><div class="swatch-hex">from-white via-white to-neutral-400</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block bg-gradient-to-t from-[#030303] via-transparent to-transparent" style="background-color: rgba(255,255,255,0.05);"></div>
+        <div class="swatch-info"><div class="swatch-name">Fade Overlay</div><div class="swatch-hex">from-[#030303] via-transparent</div></div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#196420]/10 via-transparent to-transparent" style="background-color:#0A0A0A"></div>
+        <div class="swatch-info"><div class="swatch-name">Service Card Glow</div><div class="swatch-hex">radial-gradient green/5 → transparent</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     §3 — UI COMPONENTS
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="ds-section bg-[#030303]" id="components">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="ds-section-header animate-on-scroll">
+      <h2 class="ds-section-title">UI <span>Components</span></h2>
+      <div class="ds-section-line"></div>
+      <span class="ds-section-number">§3</span>
+    </div>
+
+    <!-- ── Buttons ── -->
+    <h3 class="text-lg font-semibold text-white mb-8 animate-on-scroll">Buttons</h3>
+    <div class="mb-12 animate-on-scroll" style="transition-delay:100ms">
+      <div class="states-grid mb-6">
+        <div class="state-item">
+          <span class="state-label">Primary (default)</span>
+          <button class="shiny-cta">
+            <span>Start Project</span>
+            <svg class="lucide lucide-arrow-right w-4 h-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </button>
+        </div>
+        <div class="state-item">
+          <span class="state-label">Primary (hover)</span>
+          <button class="shiny-cta" style="border-color: rgba(25,100,32,0.4); box-shadow: 0 0 15px rgba(25,100,32,0.15); transform: translateY(-1px);">
+            <span>Start Project</span>
+            <svg class="lucide lucide-arrow-right w-4 h-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </button>
+        </div>
+        <div class="state-item">
+          <span class="state-label">Primary Large</span>
+          <button class="shiny-cta h-[56px] px-8">
+            <span>Book Call</span>
+          </button>
+        </div>
+      </div>
+      <div class="states-grid">
+        <div class="state-item">
+          <span class="state-label">Secondary (default)</span>
+          <button class="btn-secondary">
+            <span>Our Services</span>
+            <svg class="lucide lucide-chevron-down w-4 h-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+        </div>
+        <div class="state-item">
+          <span class="state-label">Secondary (hover)</span>
+          <button class="btn-secondary" style="background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.15);">
+            <span>Our Services</span>
+            <svg class="lucide lucide-chevron-down w-4 h-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+        </div>
+        <div class="state-item">
+          <span class="state-label">Circle Arrow</span>
+          <button class="group flex items-center gap-4 text-white hover:text-[#196420] transition-colors">
+            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#196420] group-hover:bg-[#196420] group-hover:text-white transition-all duration-300">
+              <svg class="lucide lucide-arrow-right w-5 h-5" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </div>
+            <span class="uppercase tracking-widest text-xs font-semibold">Send Inquiry</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Inputs ── -->
+    <h3 class="text-lg font-semibold text-white mb-8 animate-on-scroll">Inputs</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 animate-on-scroll" style="transition-delay:150ms">
+      <div>
+        <span class="state-label mb-3 block">Default</span>
+        <input class="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-neutral-600 focus:outline-none focus:border-[#196420] transition-colors text-lg" placeholder="Your Name" type="text"/>
+      </div>
+      <div>
+        <span class="state-label mb-3 block">Focus</span>
+        <input class="w-full bg-transparent border-b border-[#196420] py-4 text-white placeholder-neutral-600 focus:outline-none transition-colors text-lg" placeholder="Your Email" type="email" value="hello@bezaleel.ai"/>
+      </div>
+      <div>
+        <span class="state-label mb-3 block">Textarea</span>
+        <textarea class="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-neutral-600 focus:outline-none focus:border-[#196420] transition-colors text-lg resize-none" placeholder="Project Details" rows="1"></textarea>
+      </div>
+    </div>
+
+    <!-- ── Cards ── -->
+    <h3 class="text-lg font-semibold text-white mb-8 animate-on-scroll">Cards</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 animate-on-scroll" style="transition-delay:200ms">
+      <!-- Service Card -->
+      <div class="group relative h-[300px] service-card rounded-2xl border border-white/5 bg-neutral-900/30 p-8 hover:bg-neutral-900/60 hover:border-[#196420]/30">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#196420]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+        <div class="flex flex-col h-full z-10 relative">
+          <div class="icon-wrapper mb-6 w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 group-hover:border-[#196420]/50 group-hover:bg-[#196420]/10 transition-colors duration-300">
+            <iconify-icon height="24" icon="solar:code-square-linear" width="24"></iconify-icon>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-3">Service Card</h3>
+          <p class="text-sm text-neutral-400 leading-relaxed">Hover to see glow effect, icon animation, and border transition.</p>
+        </div>
+      </div>
+
+      <!-- Testimonial Card -->
+      <div class="w-full p-6 bg-neutral-900/30 border border-white/5 rounded-xl hover:border-[#196420]/20 transition-colors">
+        <div class="flex items-center gap-1 text-[#196420] mb-4">
+          <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+          <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+          <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+          <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+          <iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+        </div>
+        <p class="text-neutral-300 text-sm leading-relaxed mb-6">"Testimonial card with star ratings, quote text, and avatar initials."</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white">DS</div>
+          <div><div class="text-sm font-medium text-white">Design System</div><div class="text-xs text-neutral-500">Pattern Library</div></div>
+        </div>
+      </div>
+
+      <!-- Work Card -->
+      <div class="group block">
+        <div class="relative w-full aspect-[16/10] bg-[#0A0A0A] border border-white/5 rounded-xl overflow-hidden mb-4 card-grid-bg">
+          <div class="absolute inset-8 shadow-2xl rounded-lg overflow-hidden transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02] border border-white/5">
+            <img alt="Work Project" class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500" loading="lazy" src="assets/photo-1460925895917-afdab827c5_3af880f446fb.jpg"/>
+          </div>
+        </div>
+        <div class="flex items-start justify-between mb-2">
+          <h3 class="text-2xl font-semibold text-white group-hover:text-[#196420] transition-colors">Work Card</h3>
+          <span class="px-2 py-1 text-[10px] uppercase tracking-wider font-medium border border-white/10 rounded text-neutral-400">Tag</span>
+        </div>
+        <p class="text-sm text-neutral-400 leading-relaxed">Image lifts on hover with desaturation removed.</p>
+      </div>
+    </div>
+
+    <!-- ── Pills & Badges ── -->
+    <h3 class="text-lg font-semibold text-white mb-8 animate-on-scroll">Pills & Badges</h3>
+    <div class="states-grid mb-12 animate-on-scroll" style="transition-delay:250ms">
+      <div class="state-item">
+        <span class="state-label">Glass Pill</span>
+        <div class="pill-wrapper group">
+          <div class="beam-ring"></div>
+          <div class="apple-glass-pill inline-flex items-center gap-2 px-4 py-2 relative z-10">
+            <svg class="lucide lucide-sparkles w-3.5 h-3.5 text-[#196420]" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+            <span class="text-xs font-medium tracking-wide text-neutral-200 uppercase">AI Powered Agency</span>
+          </div>
+        </div>
+      </div>
+      <div class="state-item">
+        <span class="state-label">Category Tag</span>
+        <span class="px-2 py-1 text-[10px] uppercase tracking-wider font-medium border border-white/10 rounded text-neutral-400">SaaS</span>
+      </div>
+      <div class="state-item">
+        <span class="state-label">Step Number</span>
+        <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-sm text-neutral-400 font-medium">01</div>
+      </div>
+      <div class="state-item">
+        <span class="state-label">Step Hover</span>
+        <div class="w-10 h-10 rounded-full border border-[#196420] flex items-center justify-center text-sm text-[#196420] font-medium scale-110">01</div>
+      </div>
+      <div class="state-item">
+        <span class="state-label">Avatar</span>
+        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white">JS</div>
+      </div>
+    </div>
+
+    <!-- ── Nav Item ── -->
+    <h3 class="text-lg font-semibold text-white mb-8 animate-on-scroll">Navigation Links</h3>
+    <div class="flex items-center gap-8 mb-8 animate-on-scroll" style="transition-delay:300ms">
+      <a class="text-sm text-neutral-400 hover:text-white transition-colors cursor-pointer">Default</a>
+      <a class="text-sm text-white transition-colors cursor-pointer">Active / Hover</a>
+      <a class="text-sm text-neutral-400 hover:text-white transition-colors cursor-pointer">Link</a>
+      <a class="text-neutral-400 text-sm hover:text-[#196420] transition-colors underline decoration-neutral-800 underline-offset-4 decoration-1 cursor-pointer">Email Link</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     §4 — LAYOUT & SPACING
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="ds-section bg-[#030303]" id="layout">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="ds-section-header animate-on-scroll">
+      <h2 class="ds-section-title">Layout & <span>Spacing</span></h2>
+      <div class="ds-section-line"></div>
+      <span class="ds-section-number">§4</span>
+    </div>
+
+    <!-- Container -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Container</h3>
+    <div class="mb-12 animate-on-scroll" style="transition-delay:100ms">
+      <div class="border border-dashed border-white/10 rounded-xl p-4">
+        <div class="max-w-7xl mx-auto px-6 border border-white/5 rounded-lg p-4 bg-white/[0.02]">
+          <span class="text-xs text-neutral-500 font-bold uppercase tracking-wider">max-w-7xl · mx-auto · px-6</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Layout: 12-col split -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Pattern 1 — Hero Split (6 + 6)</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 animate-on-scroll" style="transition-delay:150ms">
+      <div class="lg:col-span-6">
+        <div class="layout-demo-box h-[200px]">col-span-6 · Content</div>
+      </div>
+      <div class="lg:col-span-6">
+        <div class="layout-demo-box h-[200px]">col-span-6 · 3D / Media</div>
+      </div>
+    </div>
+
+    <!-- About Layout: 4 + 8 -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Pattern 2 — Content Split (4 + 8)</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 mb-12 animate-on-scroll" style="transition-delay:200ms">
+      <div class="lg:col-span-4">
+        <div class="layout-demo-box h-[120px]">col-span-4 · Sidebar</div>
+      </div>
+      <div class="lg:col-span-8">
+        <div class="layout-demo-box h-[120px]">col-span-8 · Main Content</div>
+      </div>
+    </div>
+
+    <!-- Service Grid: 3-col -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Pattern 3 — Service Grid (3 cols)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 animate-on-scroll" style="transition-delay:250ms">
+      <div class="layout-demo-box">Card 1</div>
+      <div class="layout-demo-box">Card 2</div>
+      <div class="layout-demo-box">Card 3</div>
+      <div class="layout-demo-box">Card 4</div>
+      <div class="layout-demo-box">Card 5</div>
+      <div class="layout-demo-box">Card 6</div>
+    </div>
+
+    <!-- Section Padding Reference -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Section Spacing</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-on-scroll" style="transition-delay:300ms">
+      <div class="rounded-xl border border-white/5 p-6 bg-neutral-900/20">
+        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-2">Section Padding</span>
+        <span class="text-sm text-white font-medium">py-24 (96px)</span>
+      </div>
+      <div class="rounded-xl border border-white/5 p-6 bg-neutral-900/20">
+        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-2">Section Gap</span>
+        <span class="text-sm text-white font-medium">gap-8 (32px) · gap-6 (24px)</span>
+      </div>
+      <div class="rounded-xl border border-white/5 p-6 bg-neutral-900/20">
+        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-2">Card Padding</span>
+        <span class="text-sm text-white font-medium">p-6 (24px) · p-8 (32px)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     §5 — MOTION & INTERACTION
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="ds-section bg-[#030303]" id="motion">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="ds-section-header animate-on-scroll">
+      <h2 class="ds-section-title">Motion & <span>Interaction</span></h2>
+      <div class="ds-section-line"></div>
+      <span class="ds-section-number">§5</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+      <!-- 1. Scroll Entrance -->
+      <div class="motion-card animate-on-scroll">
+        <div class="w-16 h-16 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 animate-on-scroll" style="transition-delay: 200ms">
+          <svg class="w-6 h-6" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </div>
+        <span class="motion-label">Scroll Entrance</span>
+        <span class="motion-trigger">animate-on-scroll → animationIn 0.8s</span>
+        <p class="text-xs text-neutral-500 text-center">Fade up + blur dissolve<br>cubic-bezier(0.25, 1, 0.5, 1)</p>
+      </div>
+
+      <!-- 2. Brand Glow -->
+      <div class="motion-card animate-on-scroll" style="transition-delay:100ms">
+        <span class="text-3xl font-semibold text-[#196420] animate-brand-glow">Glow</span>
+        <span class="motion-label">Text Brand Glow</span>
+        <span class="motion-trigger">animate-brand-glow · 3s infinite</span>
+        <p class="text-xs text-neutral-500 text-center">Alternates text-shadow and color<br>between #114516 ↔ #196420</p>
+      </div>
+
+      <!-- 3. Beam Spin -->
+      <div class="motion-card animate-on-scroll" style="transition-delay:150ms">
+        <div class="pill-wrapper group" style="--hover: 1">
+          <div class="beam-ring" style="opacity:1"></div>
+          <div class="apple-glass-pill inline-flex items-center gap-2 px-4 py-2 relative z-10">
+            <span class="text-xs font-medium text-neutral-200">Beam Ring</span>
+          </div>
+        </div>
+        <span class="motion-label">Beam Spin</span>
+        <span class="motion-trigger">beam-spin · 4s linear infinite</span>
+        <p class="text-xs text-neutral-500 text-center">Conic gradient rotates around pill<br>Visible on hover</p>
+      </div>
+
+      <!-- 4. Icon Pop -->
+      <div class="motion-card animate-on-scroll" style="transition-delay:200ms">
+        <div class="group service-card p-4 rounded-xl border border-white/5 bg-neutral-900/30 hover:bg-neutral-900/60 hover:border-[#196420]/30 cursor-pointer transition-all">
+          <div class="icon-wrapper w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 group-hover:border-[#196420]/50 group-hover:bg-[#196420]/10 transition-colors duration-300">
+            <iconify-icon height="24" icon="solar:cpu-linear" width="24"></iconify-icon>
+          </div>
+        </div>
+        <span class="motion-label">Icon Lottie Pop</span>
+        <span class="motion-trigger">Hover → lottie-pop 0.6s</span>
+        <p class="text-xs text-neutral-500 text-center">Scale 1 → 1.2 → 0.9 → 1<br>With rotation wobble</p>
+      </div>
+
+      <!-- 5. Button Shiny Sweep -->
+      <div class="motion-card animate-on-scroll" style="transition-delay:250ms">
+        <button class="shiny-cta">
+          <span>Hover Me</span>
+          <svg class="lucide lucide-arrow-right w-4 h-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </button>
+        <span class="motion-label">Shiny CTA Sweep</span>
+        <span class="motion-trigger">::before sweep left→right 0.7s</span>
+        <p class="text-xs text-neutral-500 text-center">Green border glow + translateY(-1px)<br>Light sweep pseudo-element</p>
+      </div>
+
+      <!-- 6. Infinite Marquee -->
+      <div class="motion-card animate-on-scroll overflow-hidden" style="transition-delay:300ms">
+        <div class="relative w-full overflow-hidden mask-fade-x flex gap-4">
+          <div class="flex items-center gap-4 animate-loop-scroll shrink-0">
+            <iconify-icon class="shrink-0 text-white" height="16" icon="simple-icons:openai"></iconify-icon>
+            <iconify-icon class="shrink-0" height="16" icon="logos:google"></iconify-icon>
+            <iconify-icon class="shrink-0 brightness-0 invert" height="14" icon="logos:vercel"></iconify-icon>
+            <iconify-icon class="shrink-0" height="16" icon="logos:stripe"></iconify-icon>
+          </div>
+          <div class="flex items-center gap-4 animate-loop-scroll shrink-0" aria-hidden="true">
+            <iconify-icon class="shrink-0 text-white" height="16" icon="simple-icons:openai"></iconify-icon>
+            <iconify-icon class="shrink-0" height="16" icon="logos:google"></iconify-icon>
+            <iconify-icon class="shrink-0 brightness-0 invert" height="14" icon="logos:vercel"></iconify-icon>
+            <iconify-icon class="shrink-0" height="16" icon="logos:stripe"></iconify-icon>
+          </div>
+        </div>
+        <span class="motion-label">Infinite Scroll</span>
+        <span class="motion-trigger">loop-scroll 40s linear infinite</span>
+        <p class="text-xs text-neutral-500 text-center">Duplicated set for seamless loop<br>mask-fade-x for edge fade</p>
+      </div>
+
+      <!-- 7. Work Card Lift -->
+      <div class="motion-card animate-on-scroll" style="transition-delay:350ms">
+        <div class="group w-full aspect-video bg-[#0A0A0A] border border-white/5 rounded-lg overflow-hidden card-grid-bg relative cursor-pointer">
+          <div class="absolute inset-4 shadow-2xl rounded overflow-hidden transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02] border border-white/5">
+            <img alt="Demo" class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500" loading="lazy" src="assets/photo-1551288049-bebda4e38f71_2b24cf23715e.jpg"/>
+          </div>
+        </div>
+        <span class="motion-label">Card Lift</span>
+        <span class="motion-trigger">hover → -translate-y-2 + scale 1.02</span>
+        <p class="text-xs text-neutral-500 text-center">Image desaturates on rest<br>Full color + lift on hover</p>
+      </div>
+
+      <!-- 8. Process Step Hover -->
+      <div class="motion-card animate-on-scroll" style="transition-delay:400ms">
+        <div class="group flex flex-col items-start gap-3 p-4 rounded-2xl border border-transparent hover:border-white/5 hover:bg-neutral-900/30 transition-all duration-300 cursor-pointer w-full">
+          <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-sm text-neutral-400 font-medium group-hover:border-[#196420] group-hover:text-[#196420] group-hover:scale-110 transition-all duration-300">01</div>
+          <h3 class="text-lg font-semibold text-white group-hover:translate-x-1 transition-transform duration-300">Discovery</h3>
+        </div>
+        <span class="motion-label">Process Step Hover</span>
+        <span class="motion-trigger">number scale + title slide-right</span>
+      </div>
+
+      <!-- 9. Reveal Blur (About text) -->
+      <div class="motion-card animate-on-scroll" style="transition-delay:450ms">
+        <div class="group animate-on-scroll animate text-center">
+          <span class="inline-block opacity-0 blur-[4px] translate-y-4 group-[.animate]:opacity-100 group-[.animate]:blur-0 group-[.animate]:translate-y-0 transition-all duration-700 ease-out delay-[0ms] text-white text-xl font-normal font-[Space_Grotesk]">Word</span>
+          <span class="inline-block opacity-0 blur-[4px] translate-y-4 group-[.animate]:opacity-100 group-[.animate]:blur-0 group-[.animate]:translate-y-0 transition-all duration-700 ease-out delay-[150ms] text-neutral-500 text-xl font-normal font-[Space_Grotesk]">by</span>
+          <span class="inline-block opacity-0 blur-[4px] translate-y-4 group-[.animate]:opacity-100 group-[.animate]:blur-0 group-[.animate]:translate-y-0 transition-all duration-700 ease-out delay-[300ms] text-white text-xl font-normal font-[Space_Grotesk]">word</span>
+        </div>
+        <span class="motion-label">Blur Reveal</span>
+        <span class="motion-trigger">Per-word blur + translate stagger</span>
+        <p class="text-xs text-neutral-500 text-center">Each word: blur(4px) + translateY(4)<br>Staggered 75ms delays</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     §6 — ICONS
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="ds-section bg-[#030303]" id="icons">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="ds-section-header animate-on-scroll">
+      <h2 class="ds-section-title">Icon<span>ography</span></h2>
+      <div class="ds-section-line"></div>
+      <span class="ds-section-number">§6</span>
+    </div>
+
+    <p class="text-sm text-neutral-400 mb-8 animate-on-scroll">Two icon systems are used: <strong class="text-white">Lucide</strong> (inline SVG) and <strong class="text-white">Iconify</strong> (Solar set, via web component). All icons inherit <code class="text-xs text-neutral-500 bg-white/5 px-1 py-0.5 rounded">currentColor</code>.</p>
+
+    <!-- Lucide Icons -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Lucide (SVG Inline)</h3>
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 mb-12 animate-on-scroll" style="transition-delay:100ms">
+      <!-- Each icon box -->
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">arrow-right</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">chevron-down</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">arrow-up-right</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">sparkles</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="1"></circle><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"></path><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"></path></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">atom</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="16" rx="2" width="16" x="4" y="4"></rect><rect height="6" rx="1" width="6" x="9" y="9"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">cpu</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">layers</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <svg class="w-5 h-5 text-neutral-400" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">message-square</span>
+      </div>
+    </div>
+
+    <!-- Iconify Solar Icons -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Iconify — Solar Set</h3>
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-8 animate-on-scroll" style="transition-delay:150ms">
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <iconify-icon class="text-neutral-400" height="24" icon="solar:code-square-linear" width="24"></iconify-icon>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">code-square</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <iconify-icon class="text-neutral-400" height="24" icon="solar:cpu-linear" width="24"></iconify-icon>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">cpu</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <iconify-icon class="text-neutral-400" height="24" icon="solar:chart-square-linear" width="24"></iconify-icon>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">chart-square</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <iconify-icon class="text-neutral-400" height="24" icon="solar:smartphone-linear" width="24"></iconify-icon>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">smartphone</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <iconify-icon class="text-neutral-400" height="24" icon="solar:widget-linear" width="24"></iconify-icon>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">widget</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/5 bg-neutral-900/20 hover:border-white/10 transition-colors">
+        <iconify-icon class="text-neutral-400" height="24" icon="solar:shield-warning-linear" width="24"></iconify-icon>
+        <span class="text-[9px] text-neutral-600 uppercase tracking-wider">shield-warning</span>
+      </div>
+    </div>
+
+    <!-- Size Variants -->
+    <h3 class="text-lg font-semibold text-white mb-6 animate-on-scroll">Size Variants & Color Inheritance</h3>
+    <div class="flex items-end gap-6 mb-8 animate-on-scroll" style="transition-delay:200ms">
+      <div class="flex flex-col items-center gap-2">
+        <iconify-icon class="text-neutral-500" height="14" icon="solar:star-bold" width="14"></iconify-icon>
+        <span class="text-[9px] text-neutral-600">14px</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <iconify-icon class="text-neutral-400" height="16" icon="solar:star-bold" width="16"></iconify-icon>
+        <span class="text-[9px] text-neutral-600">16px</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <iconify-icon class="text-neutral-300" height="20" icon="solar:star-bold" width="20"></iconify-icon>
+        <span class="text-[9px] text-neutral-600">20px</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <iconify-icon class="text-[#196420]" height="24" icon="solar:star-bold" width="24"></iconify-icon>
+        <span class="text-[9px] text-neutral-600">24px · green</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <iconify-icon class="text-[#196420]" height="32" icon="solar:star-bold" width="32"></iconify-icon>
+        <span class="text-[9px] text-neutral-600">32px · green</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════════════════ -->
+<footer class="bg-black border-t border-white/10 px-6 py-10 z-20 relative">
+  <div class="max-w-[1920px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <nav class="flex flex-wrap justify-center gap-8 text-[11px] font-bold uppercase tracking-widest text-neutral-500">
+      <a class="hover:text-white transition-colors" href="#hero">Hero</a>
+      <a class="hover:text-white transition-colors" href="#typography">Typography</a>
+      <a class="hover:text-white transition-colors" href="#colors">Colors</a>
+      <a class="hover:text-white transition-colors" href="#components">Components</a>
+      <a class="hover:text-white transition-colors" href="#layout">Layout</a>
+      <a class="hover:text-white transition-colors" href="#motion">Motion</a>
+      <a class="hover:text-white transition-colors" href="#icons">Icons</a>
+    </nav>
+    <div class="text-[11px] text-neutral-600 tracking-wide font-medium">
+      Design System v2 — Extracted from <span class="text-neutral-400 underline decoration-neutral-700 hover:text-[#196420] transition-colors cursor-pointer">Bezaleel</span>
+    </div>
+  </div>
+</footer>
+
+</body></html>
