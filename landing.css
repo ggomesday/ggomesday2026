@@ -69,10 +69,10 @@ a {
 
 /* Text Glow */
 @keyframes text-brand-glow {
-  0%, 100% { text-shadow: 0 0 10px rgba(25, 100, 32, 0.2); color: #114516; }
-  50% { text-shadow: 0 0 20px rgba(25, 100, 32, 0.6); color: #196420; }
+  0%, 100% { text-shadow: 0 0 15px rgba(25, 100, 32, 0.4); color: #114516; }
+  50% { text-shadow: 0 0 40px rgba(25, 100, 32, 0.9), 0 0 60px rgba(25, 100, 32, 0.5); color: #2ea82e; }
 }
-.animate-brand-glow { animation: text-brand-glow 3s ease-in-out infinite; }
+.animate-brand-glow { animation: text-brand-glow 1.5s ease-in-out infinite; }
 
 /* Beam Spin */
 @keyframes beam-spin {
