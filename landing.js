@@ -2,6 +2,14 @@
    G.GOMES DAY 2026 — LANDING PAGE SCRIPTS
    ═══════════════════════════════════════════════════════════════ */
 
+/**
+ * ═══════════════════════════════════════════════════════════════════════
+ * CONFIGURAÇÃO SUPABASE
+ * ═══════════════════════════════════════════════════════════════════════ */
+const SUPABASE_URL = "https://mpxqdabkmhlzdwweuikk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Qp8JrbQYrylukDb6UuFRIQ_IyKorZNV";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // ── 1. Scroll Animation Observer ──
@@ -89,40 +97,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!form) return;
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const nameInput = document.getElementById("input-name");
       const emailInput = document.getElementById("input-email");
+      const submitBtn = form.querySelector('button[type="submit"]');
 
-      if (!nameInput.value.trim() || !emailInput.value.trim()) {
-        return;
-      }
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+
+      if (!name || !email) return;
 
       // Simple email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(emailInput.value)) {
+      if (!emailRegex.test(email)) {
         emailInput.style.borderColor = "#ef4444";
-        setTimeout(() => {
-          emailInput.style.borderColor = "";
-        }, 2000);
+        setTimeout(() => { emailInput.style.borderColor = ""; }, 2000);
         return;
       }
 
-      // Show success state
-      if (formContent && formSuccess) {
-        formContent.style.display = "none";
-        formSuccess.classList.add("show");
+      // Disable button during submission
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = "0.7";
+        submitBtn.innerHTML = '<span>Enviando...</span>';
       }
 
-      // Reset after 4s
-      setTimeout(() => {
+      try {
+        // Enviar para o Supabase
+        const { error } = await supabaseClient
+          .from('leads')
+          .insert([
+            { 
+              name: name, 
+              email: email,
+              source: 'G.Gomes Day 2026',
+              created_at: new Date().toISOString()
+            }
+          ]);
+
+        if (error) throw error;
+
+        // Show success state
         if (formContent && formSuccess) {
-          formContent.style.display = "block";
-          formSuccess.classList.remove("show");
-          form.reset();
+          formContent.style.display = "none";
+          formSuccess.classList.add("show");
         }
-      }, 4000);
+
+        // Reset form
+        form.reset();
+
+      } catch (err) {
+        console.error("Erro ao enviar para o Supabase:", err);
+        alert("Houve um erro ao processar sua inscrição. Por favor, tente novamente.");
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = "1";
+          submitBtn.innerHTML = `
+            <span>Quero Participar</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          `;
+        }
+      }
     });
 
     // Input focus effects
