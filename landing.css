@@ -17,6 +17,7 @@
   --border-subtle: rgba(255, 255, 255, 0.05);
   --border-light: rgba(255, 255, 255, 0.08);
   --border-medium: rgba(255, 255, 255, 0.1);
+  --grid-subtle: rgba(25, 100, 32, 0.08);
 }
 
 /* ── Base Reset & Typography ── */
@@ -346,6 +347,17 @@ a {
 /* ═══════════════════════════════════════════════════════════════
    BACKGROUND PATTERNS
    ═══════════════════════════════════════════════════════════════ */
+
+.global-page-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -30;
+  background-size: 60px 60px;
+  background-image:
+    linear-gradient(to right, var(--grid-subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-subtle) 1px, transparent 1px);
+  pointer-events: none;
+}
 
 .perspective-grid {
   background-size: 50px 50px;

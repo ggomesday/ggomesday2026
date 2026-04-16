@@ -21,6 +21,7 @@
 :root {
   --brand-primary: #196420;
   --brand-dim: #114516;
+  --grid-subtle: rgba(25, 100, 32, 0.08);
 }
 body {
   background-color: #030303;
@@ -153,6 +154,18 @@ h1, h2, h3, h4, h5, h6 {
   40% { transform: scale(1.2) rotate(5deg); }
   70% { transform: scale(0.9) rotate(-3deg); }
   100% { transform: scale(1) rotate(0); }
+}
+
+/* --- PERSPECTIVE GRID --- */
+.global-page-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -30;
+  background-size: 60px 60px;
+  background-image:
+    linear-gradient(to right, var(--grid-subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-subtle) 1px, transparent 1px);
+  pointer-events: none;
 }
 
 /* Grid & Backgrounds */
@@ -405,6 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </head>
 
 <body class="selection:bg-[#196420] selection:text-white antialiased bg-[#030303]">
+<div class="global-page-grid"></div>
 
 <!-- ═══════════════════════════════════════════════════════════════════════
      DESIGN SYSTEM NAVIGATION
