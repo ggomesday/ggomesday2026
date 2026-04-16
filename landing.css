@@ -350,10 +350,11 @@ a {
 .perspective-grid {
   background-size: 50px 50px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(25, 100, 32, 0.4) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(25, 100, 32, 0.4) 1px, transparent 1px);
   mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   pointer-events: none;
+  filter: drop-shadow(0 0 5px rgba(25, 100, 32, 0.5));
 }
 .mask-fade-x {
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
