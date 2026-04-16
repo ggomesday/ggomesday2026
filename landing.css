@@ -357,6 +357,7 @@ a {
     linear-gradient(to right, var(--grid-subtle) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-subtle) 1px, transparent 1px);
   pointer-events: none;
+  opacity: 1;
 }
 
 .perspective-grid {
