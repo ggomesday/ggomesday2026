@@ -227,47 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  // ── 8. Lazy-load Spline 3D (maior gargalo de performance) ──
-  function initSplineLazyLoad() {
-    const container = document.getElementById("spline-container");
-    const placeholder = document.getElementById("spline-placeholder");
-    if (!container || !placeholder) return;
-
-    let splineLoaded = false;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !splineLoaded) {
-          splineLoaded = true;
-
-          // Criar o iframe sob demanda
-          const iframe = document.createElement("iframe");
-          iframe.className = "contrast-125 opacity-90 absolute top-0 left-0 pointer-events-auto scale-110 md:scale-125 translate-x-0 translate-y-0 md:translate-x-12 md:translate-y-12";
-          iframe.frameBorder = "0";
-          iframe.style.cssText = "width:100%;height:100%;filter:hue-rotate(85deg) brightness(0.8) saturate(1.5);";
-          iframe.src = "https://my.spline.design/nexbotrobotcharacterconcept-f9fb70f64f78f621dac9e33520a8dd0c/";
-
-          // Quando o iframe terminar de carregar, desvanecer o placeholder
-          iframe.addEventListener("load", () => {
-            placeholder.style.opacity = "0";
-            setTimeout(() => {
-              placeholder.style.display = "none";
-            }, 700);
-          });
-
-          container.appendChild(iframe);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: "200px 0px" }); // rootMargin: começa a carregar um pouco antes de aparecer
-
-    const heroSection = document.getElementById("hero");
-    if (heroSection) {
-      observer.observe(heroSection);
-    }
-  }
-
-
   // ── Initialize All ──
   initScrollAnimations();
   initSmoothScroll();
@@ -276,6 +235,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initForm();
   initParallaxGlow();
   initActiveNavHighlight();
-  initSplineLazyLoad();
 
 });
