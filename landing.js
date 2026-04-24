@@ -102,10 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const nameInput = document.getElementById("input-name");
       const emailInput = document.getElementById("input-email");
+      const phoneInput = document.getElementById("input-phone");
+      const companyInput = document.getElementById("input-company");
       const submitBtn = form.querySelector('button[type="submit"]');
 
       const name = nameInput.value.trim();
       const email = emailInput.value.trim();
+      const phone = phoneInput ? phoneInput.value.trim() : "";
+      const company = companyInput ? companyInput.value.trim() : "";
 
       if (!name || !email) return;
 
@@ -132,6 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
             { 
               name: name, 
               email: email,
+              phone: phone,
+              company: company,
               source: 'G.Gomes Day 2026',
               created_at: new Date().toISOString()
             }

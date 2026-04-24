@@ -690,6 +690,8 @@ function renderLeadsTable() {
       <tr>
         <td class="td-name">${escapeHtml(lead.name || "Sem nome")}</td>
         <td class="td-email">${escapeHtml(lead.email || "—")}</td>
+        <td class="td-phone">${escapeHtml(lead.phone || "—")}</td>
+        <td class="td-company">${escapeHtml(lead.company || "—")}</td>
         <td><span class="source-badge">${escapeHtml(lead.source || "—")}</span></td>
         <td class="td-date">${date}</td>
         <td>
@@ -824,10 +826,12 @@ function exportCSV() {
     return;
   }
 
-  const headers = ["Nome", "Email", "Fonte", "Data de Inscrição"];
+  const headers = ["Nome", "Email", "Telefone", "Empresa", "Fonte", "Data de Inscrição"];
   const rows = filteredLeads.map((lead) => [
     `"${(lead.name || "").replace(/"/g, '""')}"`,
     `"${(lead.email || "").replace(/"/g, '""')}"`,
+    `"${(lead.phone || "").replace(/"/g, '""')}"`,
+    `"${(lead.company || "").replace(/"/g, '""')}"`,
     `"${(lead.source || "").replace(/"/g, '""')}"`,
     `"${lead.created_at ? new Date(lead.created_at).toLocaleString("pt-BR") : ""}"`,
   ]);
