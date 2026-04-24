@@ -658,6 +658,99 @@
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════
+     §9 — LOCAL DO EVENTO
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="bg-[#030303] border-t border-white/10 py-24 px-6 relative z-10" id="venue">
+  <div class="max-w-7xl mx-auto">
+    <!-- Section Header -->
+    <div class="section-header animate-on-scroll">
+      <h2>Local do <span>Evento</span></h2>
+      <div class="line"></div>
+      <div class="icon-circle">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+    </div>
+
+    <!-- Content Grid: Info + Image -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+
+      <!-- Left: Address Info -->
+      <div class="venue-info-card animate-on-scroll" style="transition-delay: 100ms;">
+        <!-- Glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-[#196420] opacity-[0.03] blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col justify-center h-full">
+          <!-- Venue Name -->
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-[#196420]/15 border border-[#196420]/30 flex items-center justify-center text-[#196420] flex-shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-medium text-[#196420] tracking-[0.2em] mb-1">onde vai acontecer</p>
+              <h3 class="text-2xl md:text-3xl font-semibold text-white tracking-tight">Ville des Plantes</h3>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-[1px] bg-gradient-to-r from-white/10 via-white/5 to-transparent mb-6"></div>
+
+          <!-- Address -->
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <div class="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <p class="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1">Endereço</p>
+                <p class="text-base text-white leading-relaxed">Rua Prefeito Joaquim Gonçalves de Assis, 50</p>
+                <p class="text-sm text-neutral-400">Jardim Oceania, João Pessoa - PB</p>
+                <p class="text-sm text-neutral-500">CEP: 58037-645</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div>
+                <p class="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1">Formato</p>
+                <p class="text-base text-white">Evento Presencial</p>
+                <p class="text-sm text-neutral-400">Open Mall · Espaço ao ar livre</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA Map -->
+          <div class="mt-8">
+            <a href="https://maps.google.com/?q=Rua+Prefeito+Joaquim+Gon%C3%A7alves+de+Assis+50+Jardim+Oceania+Jo%C3%A3o+Pessoa+PB" target="_blank" rel="noopener noreferrer" class="shiny-cta">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7 6 13 6 13s6-6 6-13Z"/><circle cx="12" cy="8" r="2"/></svg>
+              <span>Ver no Google Maps</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Venue Photo -->
+      <div class="venue-photo-card animate-on-scroll" style="transition-delay: 250ms;">
+        <img src="ville-des-plantes-photo.jpg" alt="Ville des Plantes Open Mall — Local do G.Gomes Day 2026" class="venue-photo" loading="lazy"/>
+        <!-- Gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-2xl pointer-events-none"></div>
+        <!-- Photo badge -->
+        <div class="absolute bottom-5 left-5 z-10">
+          <div class="apple-glass-pill inline-flex items-center gap-2 px-4 py-2">
+            <svg class="w-3.5 h-3.5 text-[#196420]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="text-xs font-medium text-neutral-200">Ville des Plantes · Open Mall</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
      FOOTER
      ═══════════════════════════════════════════════════════════════════════ -->
 <footer class="bg-black border-t border-white/10 px-6 py-10 z-20 relative">
