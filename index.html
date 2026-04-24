@@ -7,22 +7,28 @@
   <meta name="description" content="G.Gomes Day 2026: O evento definitivo sobre Inteligência Artificial aplicada aos negócios. Descubra como escalar, automatizar e se destacar com IA."/>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       ASSETS — Reusando JS/CSS do design system
+       PRECONNECT — Domínios externos para acelerar DNS/TCP
        ═══════════════════════════════════════════════════════════════ -->
-  <script src="assets/resource_3fa48481346f.es"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/iconify-icon_e19829e7f0e8.js"></script>
-  <script src="assets/lucide_latest_2eebd0ebe8c2.es"></script>
-  <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-  <link href="assets/css2_b576227558ef.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preconnect" href="https://my.spline.design"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net"/>
 
-  <!-- Font Links -->
-  <link href="assets/css2_8e191ef32247.css" rel="stylesheet"/>
-  <link href="assets/css2_86e10c4bcbd4.css" rel="stylesheet"/>
-
-  <!-- Landing Page CSS -->
+  <!-- ═══════════════════════════════════════════════════════════════
+       CSS — Carregamento não-bloqueante de fontes
+       ═══════════════════════════════════════════════════════════════ -->
   <link href="landing.css" rel="stylesheet"/>
+  <link href="assets/css2_b576227558ef.css" rel="stylesheet"/>
+  <link href="assets/css2_8e191ef32247.css" rel="stylesheet" media="print" onload="this.media='all'"/>
+  <link href="assets/css2_86e10c4bcbd4.css" rel="stylesheet" media="print" onload="this.media='all'"/>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       JS — Defer para não bloquear renderização
+       ═══════════════════════════════════════════════════════════════ -->
+  <script src="assets/resource_3fa48481346f.es" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="assets/iconify-icon_e19829e7f0e8.js" defer></script>
+  <script src="assets/lucide_latest_2eebd0ebe8c2.es" defer></script>
 
   <!-- Tailwind Config -->
   <script>
@@ -139,33 +145,41 @@
       </div>
     </div>
 
-    <!-- Right Column: 3D Robot -->
+    <!-- Right Column: 3D Robot (Lazy-loaded) -->
     <div class="lg:col-span-6 relative h-[400px] lg:h-[550px] flex items-center justify-center z-0 animate-on-scroll" style="transition-delay: 200ms;">
       <div class="absolute inset-0 border border-white/5 rounded-3xl bg-black/60 backdrop-blur-md overflow-hidden group">
         <div class="overflow-hidden w-full h-full relative">
-          <iframe class="contrast-125 opacity-90 absolute top-0 left-0 pointer-events-auto scale-110 md:scale-125 translate-x-0 translate-y-0 md:translate-x-12 md:translate-y-12" frameborder="0" loading="lazy" src="https://my.spline.design/nexbotrobotcharacterconcept-f9fb70f64f78f621dac9e33520a8dd0c/" style="width: 100%; height: 100%; filter: hue-rotate(85deg) brightness(0.8) saturate(1.5);"></iframe>
-          <div class="pointer-events-none bg-gradient-to-t from-[#030303] via-transparent to-transparent absolute inset-0"></div>
+          <!-- Placeholder enquanto o 3D carrega -->
+          <div id="spline-placeholder" class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#050505] z-10 transition-opacity duration-700">
+            <div style="text-align:center;">
+              <div style="width:80px;height:80px;margin:0 auto 16px;border-radius:50%;border:2px solid rgba(25,100,32,0.3);border-top-color:#196420;animation:beam-spin 1s linear infinite;"></div>
+              <p style="font-size:0.75rem;color:#525252;text-transform:uppercase;letter-spacing:0.15em;">Carregando 3D...</p>
+            </div>
+          </div>
+          <!-- O iframe é inserido via JS quando a seção fica visível -->
+          <div id="spline-container" class="absolute inset-0"></div>
+          <div class="pointer-events-none bg-gradient-to-t from-[#030303] via-transparent to-transparent absolute inset-0 z-20"></div>
           <!-- Logo Bar -->
           <div class="absolute bottom-0 left-0 w-full border-t border-white/10 bg-black/60 backdrop-blur-md pt-5 pb-5 z-20 flex flex-col justify-center">
             <p class="text-[10px] uppercase font-medium text-[#196420] tracking-[0.2em] mb-4 px-6 text-center">nossos parceiros patrocinadores</p>
             <div class="relative w-full overflow-hidden mask-fade-x flex flex-nowrap">
               <div class="flex shrink-0 w-max flex-nowrap items-center gap-12 pr-12 animate-loop-scroll">
                 <div class="flex items-center gap-12 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-500">
-                  <img src="1.png" alt="Partner 1" class="h-8 w-auto object-contain shrink-0">
-                  <img src="2.png" alt="Partner 2" class="h-8 w-auto object-contain shrink-0">
-                  <img src="3.png" alt="Partner 3" class="h-8 w-auto object-contain shrink-0">
-                  <img src="4.png" alt="Partner 4" class="h-8 w-auto object-contain shrink-0">
-                  <img src="5.png" alt="Partner 5" class="h-8 w-auto object-contain shrink-0">
+                  <img src="1.png" alt="Partner 1" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="2.png" alt="Partner 2" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="3.png" alt="Partner 3" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="4.png" alt="Partner 4" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="5.png" alt="Partner 5" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
                 </div>
               </div>
               <!-- Duplicated for loop -->
               <div aria-hidden="true" class="flex shrink-0 w-max flex-nowrap items-center gap-12 pr-12 animate-loop-scroll">
                 <div class="flex items-center gap-12 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-500">
-                  <img src="1.png" alt="Partner 1" class="h-8 w-auto object-contain shrink-0">
-                  <img src="2.png" alt="Partner 2" class="h-8 w-auto object-contain shrink-0">
-                  <img src="3.png" alt="Partner 3" class="h-8 w-auto object-contain shrink-0">
-                  <img src="4.png" alt="Partner 4" class="h-8 w-auto object-contain shrink-0">
-                  <img src="5.png" alt="Partner 5" class="h-8 w-auto object-contain shrink-0">
+                  <img src="1.png" alt="Partner 1" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="2.png" alt="Partner 2" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="3.png" alt="Partner 3" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="4.png" alt="Partner 4" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
+                  <img src="5.png" alt="Partner 5" class="h-8 w-auto object-contain shrink-0" loading="lazy" decoding="async">
                 </div>
               </div>
             </div>
