@@ -18,9 +18,13 @@
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
   <link href="assets/css2_b576227558ef.css" rel="stylesheet"/>
 
-  <!-- Font Links -->
   <link href="assets/css2_8e191ef32247.css" rel="stylesheet"/>
   <link href="assets/css2_86e10c4bcbd4.css" rel="stylesheet"/>
+
+  <!-- Preload prioritário do robô para exibição instantânea (Zero Delay) -->
+  <link rel="preload" as="image" href="robot-poster.webp" type="image/webp" fetchpriority="high"/>
+  <link rel="preconnect" href="https://my.spline.design"/>
+  <link rel="dns-prefetch" href="https://my.spline.design"/>
 
   <!-- Landing Page CSS -->
   <link href="landing.css" rel="stylesheet"/>
@@ -147,15 +151,38 @@
       </div>
     </div>
 
-    <!-- Right Column: 3D Robot -->
+    <!-- Right Column: 3D Robot (Instant Poster + Progressive 3D Upgrade) -->
     <div class="lg:col-span-6 relative h-[400px] lg:h-[550px] flex items-center justify-center z-0 animate-on-scroll" style="transition-delay: 200ms;">
       <div class="absolute inset-0 border border-white/5 rounded-3xl bg-black/60 backdrop-blur-md overflow-hidden group">
-        <div class="overflow-hidden w-full h-full relative">
-          <!-- Background escuro (fica atrás do iframe — sem indicador de loading) -->
-          <div class="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] to-[#050505] z-0"></div>
-          <!-- 3D Robot iframe (z-10 fica por cima do placeholder) -->
-          <iframe class="contrast-125 absolute top-0 left-0 pointer-events-auto scale-110 md:scale-125 translate-x-0 translate-y-0 md:translate-x-12 md:translate-y-12 z-10" frameborder="0" src="https://my.spline.design/nexbotrobotcharacterconcept-f9fb70f64f78f621dac9e33520a8dd0c/" style="width: 100%; height: 100%; filter: hue-rotate(85deg) brightness(0.8) saturate(1.5); opacity: 0; transition: opacity 0.8s ease-in-out;" onload="this.style.opacity='0.9'"></iframe>
-          <div class="pointer-events-none bg-gradient-to-t from-[#030303] via-transparent to-transparent absolute inset-0 z-20"></div>
+        <div class="overflow-hidden w-full h-full relative flex items-center justify-center">
+          
+          <!-- Background escuro com glow neon -->
+          <div class="absolute inset-0 bg-gradient-to-br from-[#070b08] to-[#030403] z-0"></div>
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-[#0df06d] opacity-[0.06] blur-[100px] rounded-full pointer-events-none"></div>
+
+          <!-- Robô Poster de Alta Resolução: Aparição IMEDIATA (0ms de espera, mobile e desktop) -->
+          <img 
+            id="hero-robot-poster"
+            src="robot-poster.webp" 
+            alt="Robô de IA 3D — G.Gomes Day 2026" 
+            fetchpriority="high"
+            decoding="async"
+            class="robot-poster-img absolute inset-0 w-full h-full object-contain pointer-events-none z-10 transition-opacity duration-700"
+          />
+
+          <!-- 3D Robot Spline (Carregamento progressivo em desktop, sobrepondo suavemente sem tela preta) -->
+          <iframe 
+            id="hero-robot-iframe"
+            class="hidden md:block contrast-125 absolute top-0 left-0 pointer-events-auto scale-110 md:scale-125 translate-x-0 translate-y-0 md:translate-x-12 md:translate-y-12 z-20" 
+            frameborder="0" 
+            src="https://my.spline.design/nexbotrobotcharacterconcept-f9fb70f64f78f621dac9e33520a8dd0c/" 
+            style="width: 100%; height: 100%; filter: hue-rotate(85deg) brightness(0.8) saturate(1.5); opacity: 0; transition: opacity 0.8s ease-in-out;" 
+            onload="this.style.opacity='0.9'; const p=document.getElementById('hero-robot-poster'); if(p) p.style.opacity='0';"
+            title="Modelo 3D Interativo G.Gomes Day">
+          </iframe>
+
+          <!-- Gradiente de acabamento na base -->
+          <div class="pointer-events-none bg-gradient-to-t from-[#030303] via-transparent to-transparent absolute inset-0 z-30"></div>
 
         </div>
       </div>

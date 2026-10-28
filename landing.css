@@ -1243,3 +1243,35 @@ a {
     justify-content: center;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO ROBOT POSTER — PERFORMANCE INSTANTÂNEA (ZERO DELAY)
+   ═══════════════════════════════════════════════════════════════ */
+.robot-poster-img {
+  filter: drop-shadow(0 0 40px rgba(13, 240, 109, 0.22));
+  transform-origin: center center;
+  animation: robotFloat 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes robotFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1.08);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.1);
+  }
+}
+
+@media (min-width: 768px) {
+  @keyframes robotFloat {
+    0%, 100% {
+      transform: translate(3rem, 3rem) scale(1.22);
+    }
+    50% {
+      transform: translate(3rem, calc(3rem - 10px)) scale(1.24);
+    }
+  }
+}
+
