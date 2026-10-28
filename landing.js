@@ -227,6 +227,71 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  // ── 8. Venue Video Modal (Pop-up do Vídeo do Local) ──
+  function initVenueVideoModal() {
+    const modal = document.getElementById("venue-video-modal");
+    const iframe = document.getElementById("venue-video-iframe");
+    const closeBtn = document.getElementById("venue-modal-close");
+    const openBtns = document.querySelectorAll("[data-open-venue-video]");
+
+    if (!modal || !iframe) return;
+
+    const embedUrl = iframe.getAttribute("data-src") || "https://www.youtube.com/embed/R4zN95lIQqs?autoplay=1&playsinline=1&rel=0&modestbranding=1";
+
+    function openModal() {
+      // Atribui URL com autoplay ao abrir
+      iframe.src = embedUrl;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      // Foco para acessibilidade
+      if (closeBtn) {
+        setTimeout(() => closeBtn.focus(), 100);
+      }
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+
+      // Remove src para cessar imediatamente o áudio/vídeo em execução
+      iframe.src = "";
+    }
+
+    // Gatilhos de abertura
+    openBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+
+    // Botão Fechar
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        closeModal();
+      });
+    }
+
+    // Fechar ao clicar fora (no backdrop)
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Fechar com a tecla ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) {
+        closeModal();
+      }
+    });
+  }
+
+
   // ── Initialize All ──
   initScrollAnimations();
   initSmoothScroll();
@@ -235,5 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initForm();
   initParallaxGlow();
   initActiveNavHighlight();
+  initVenueVideoModal();
 
 });
+

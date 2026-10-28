@@ -204,7 +204,7 @@
       </div>
     </div>
     <div class="mb-8 animate-on-scroll -mt-6">
-      <p class="text-xl md:text-2xl font-bold text-white uppercase tracking-tight font-['Space_Grotesk']">DATA: 28 DE NOVEMBRO</p>
+      <p class="text-xl md:text-2xl font-bold text-white uppercase tracking-tight font-['Space_Grotesk']">DATA: 28 DE NOVEMBRO - 17h</p>
     </div>
     <!-- Content -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
@@ -277,35 +277,38 @@
       </div>
     </div>
     <!-- Grid 3 colunas -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Palestrante 1 -->
-      <div class="speaker-card animate-on-scroll" style="transition-delay: 100ms;">
-        <div class="speaker-placeholder">
-          <div class="silhouette">?</div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
+      <!-- Bloco Lateral 1: Palestrante Oculto -->
+      <div class="speaker-card group animate-on-scroll" style="transition-delay: 100ms;">
+        <div class="speaker-image-wrapper">
+          <img src="palestranteoculto.png" alt="Palestrante Em Breve - G.Gomes Day 2026" class="speaker-image" loading="lazy" />
         </div>
         <div class="speaker-info">
           <h4 class="text-lg font-semibold text-white mb-1">Em breve</h4>
-          <p class="text-sm text-[#196420]">Informações serão reveladas em breve</p>
+          <p class="text-sm text-[#196420]">Mais um palestrante confirmado</p>
         </div>
       </div>
-      <!-- Palestrante 2 -->
-      <div class="speaker-card animate-on-scroll" style="transition-delay: 200ms;">
-        <div class="speaker-placeholder">
-          <div class="silhouette">?</div>
+
+      <!-- Bloco Central: Palestrante 1 (Iverson Iório) -->
+      <div class="speaker-card speaker-card-featured group animate-on-scroll" style="transition-delay: 200ms;">
+        <div class="speaker-badge-featured">Confirmado</div>
+        <div class="speaker-image-wrapper">
+          <img src="palestrante1.png" alt="Iverson Iório - Palestrante G.Gomes Day 2026" class="speaker-image" loading="lazy" />
         </div>
         <div class="speaker-info">
-          <h4 class="text-lg font-semibold text-white mb-1">Em breve</h4>
-          <p class="text-sm text-[#196420]">Informações serão reveladas em breve</p>
+          <h4 class="text-lg font-semibold text-white mb-1">Iverson Iório</h4>
+          <p class="text-sm text-[#196420] font-medium">Tiktokizando — Vendas nas Redes Sociais</p>
         </div>
       </div>
-      <!-- Palestrante 3 -->
-      <div class="speaker-card animate-on-scroll" style="transition-delay: 300ms;">
-        <div class="speaker-placeholder">
-          <div class="silhouette">?</div>
+
+      <!-- Bloco Lateral 2: Palestrante Oculto -->
+      <div class="speaker-card group animate-on-scroll" style="transition-delay: 300ms;">
+        <div class="speaker-image-wrapper">
+          <img src="palestranteoculto.png" alt="Palestrante Em Breve - G.Gomes Day 2026" class="speaker-image" loading="lazy" />
         </div>
         <div class="speaker-info">
           <h4 class="text-lg font-semibold text-white mb-1">Em breve</h4>
-          <p class="text-sm text-[#196420]">Informações serão reveladas em breve</p>
+          <p class="text-sm text-[#196420]">Mais um palestrante confirmado</p>
         </div>
       </div>
     </div>
@@ -742,12 +745,24 @@
             </div>
           </div>
 
-          <!-- CTA Map -->
-          <div class="mt-8">
-            <a href="https://maps.google.com/?q=Rua+Prefeito+Joaquim+Gon%C3%A7alves+de+Assis+50+Jardim+Oceania+Jo%C3%A3o+Pessoa+PB" target="_blank" rel="noopener noreferrer" class="shiny-cta">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7 6 13 6 13s6-6 6-13Z"/><circle cx="12" cy="8" r="2"/></svg>
-              <span>Ver no Google Maps</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          <!-- Action Buttons: Vídeo do Local + Google Maps (Destaque Verde Neon) -->
+          <div class="mt-8 flex flex-col gap-3.5 w-full sm:max-w-md">
+            <!-- Botão 1: Ver Vídeo do Local (Acima do Google Maps, Verde Neon Sólido) -->
+            <button type="button" class="venue-btn-video group" data-open-venue-video id="btn-open-venue-video" aria-label="Ver vídeo do local do evento">
+              <span class="venue-play-icon-pulse">
+                <svg class="w-4 h-4 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </span>
+              <span class="venue-btn-label">Ver Vídeo do Local</span>
+              <span class="venue-btn-badge">Shorts</span>
+            </button>
+
+            <!-- Botão 2: Ver no Google Maps (Verde Neon Outline / Glass) -->
+            <a href="https://maps.google.com/?q=Rua+Prefeito+Joaquim+Gon%C3%A7alves+de+Assis+50+Jardim+Oceania+Jo%C3%A3o+Pessoa+PB" target="_blank" rel="noopener noreferrer" class="venue-btn-maps group" aria-label="Abrir localização no Google Maps">
+              <svg class="w-4 h-4 text-[#0df06d] transition-transform duration-300 group-hover:scale-110 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7 6 13 6 13s6-6 6-13Z"/><circle cx="12" cy="8" r="2"/></svg>
+              <span class="venue-btn-label">Ver no Google Maps</span>
+              <svg class="w-3.5 h-3.5 text-[#0df06d] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
             </a>
           </div>
         </div>
@@ -757,11 +772,23 @@
       <div class="venue-photo-card animate-on-scroll" style="transition-delay: 250ms;">
         <img src="ville-des-plantes-photo.jpg" alt="Ville des Plantes Open Mall — Local do G.Gomes Day 2026" class="venue-photo" loading="lazy"/>
         <!-- Gradient overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-2xl pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-2xl pointer-events-none"></div>
+
+        <!-- Botão Play Flutuante Central na Foto -->
+        <button type="button" class="venue-photo-play-btn group" data-open-venue-video aria-label="Assistir tour em vídeo do local">
+          <span class="venue-photo-play-ripple"></span>
+          <div class="venue-photo-play-circle">
+            <svg class="w-6 h-6 fill-current text-[#031708] translate-x-0.5" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+          <span class="venue-photo-play-text">Assistir Tour</span>
+        </button>
+
         <!-- Photo badge -->
         <div class="absolute bottom-5 left-5 z-10">
           <div class="apple-glass-pill inline-flex items-center gap-2 px-4 py-2">
-            <svg class="w-3.5 h-3.5 text-[#196420]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <svg class="w-3.5 h-3.5 text-[#0df06d]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <span class="text-xs font-medium text-neutral-200">Ville des Plantes · Open Mall</span>
           </div>
         </div>
@@ -791,6 +818,64 @@
     </div>
   </div>
 </footer>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     MODAL POP-UP — VÍDEO DO LOCAL (YOUTUBE SHORTS)
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="venue-video-modal" class="venue-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="venue-modal-title">
+  <div class="venue-modal-card">
+    
+    <!-- Modal Header -->
+    <div class="venue-modal-header">
+      <div class="flex items-center gap-2.5">
+        <span class="venue-modal-live-badge">
+          <span class="venue-modal-live-dot"></span>
+          TOUR EM VÍDEO
+        </span>
+        <h3 id="venue-modal-title" class="text-sm md:text-base font-semibold text-white tracking-tight">Ville des Plantes</h3>
+      </div>
+      <button id="venue-modal-close" class="venue-modal-close-btn" type="button" aria-label="Fechar pop-up do vídeo">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Frame Wrapper (Proporção 9:16 Shorts) -->
+    <div class="venue-video-frame-wrap">
+      <div class="venue-video-loader">
+        <div class="venue-loader-spinner"></div>
+        <p class="text-xs text-neutral-400 mt-3 font-medium">Carregando vídeo do local...</p>
+      </div>
+
+      <iframe 
+        id="venue-video-iframe"
+        data-src="https://www.youtube.com/embed/R4zN95lIQqs?autoplay=1&playsinline=1&rel=0&modestbranding=1"
+        src=""
+        title="Tour Ville des Plantes — Local do G.Gomes Day 2026"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="venue-modal-footer">
+      <div class="flex items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-1.5 text-neutral-300">
+          <svg class="w-3.5 h-3.5 text-[#0df06d]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span class="truncate">Jardim Oceania, João Pessoa - PB</span>
+        </div>
+        <a href="https://youtube.com/shorts/R4zN95lIQqs?feature=share" target="_blank" rel="noopener noreferrer" class="venue-modal-yt-link">
+          <span>Abrir no YouTube</span>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 <!-- Landing Page Script -->
