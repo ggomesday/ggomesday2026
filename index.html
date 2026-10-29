@@ -170,14 +170,15 @@
             class="robot-poster-img absolute inset-0 w-full h-full object-contain pointer-events-none z-10 transition-opacity duration-700"
           />
 
-          <!-- 3D Robot Spline (Carregamento progressivo em desktop, sobrepondo suavemente sem tela preta) -->
+          <!-- 3D Robot Spline (Carregamento progressivo em mobile e desktop, sobrepondo suavemente sem tela preta) -->
           <iframe 
             id="hero-robot-iframe"
-            class="hidden md:block contrast-125 absolute top-0 left-0 pointer-events-auto scale-110 md:scale-125 translate-x-0 translate-y-0 md:translate-x-12 md:translate-y-12 z-20" 
+            class="contrast-125 absolute top-0 left-0 pointer-events-auto scale-110 md:scale-125 translate-x-0 translate-y-0 md:translate-x-12 md:translate-y-12 z-20" 
             frameborder="0" 
             src="https://my.spline.design/nexbotrobotcharacterconcept-f9fb70f64f78f621dac9e33520a8dd0c/" 
             style="width: 100%; height: 100%; filter: hue-rotate(85deg) brightness(0.8) saturate(1.5); opacity: 0; transition: opacity 0.8s ease-in-out;" 
             onload="this.style.opacity='0.9'; const p=document.getElementById('hero-robot-poster'); if(p) p.style.opacity='0';"
+            onerror="const p=document.getElementById('hero-robot-poster'); if(p) p.style.opacity='1';"
             title="Modelo 3D Interativo G.Gomes Day">
           </iframe>
 
