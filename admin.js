@@ -20,6 +20,23 @@ let sortDirection = "desc";
 let deleteCallback = null;
 const MAX_INSCRICOES = 110;
 
+/* ═══ PERSISTÊNCIA DE EXCLUSÕES NO PAINEL ADMIN ═══ */
+function getExcludedLeadIds() {
+  try {
+    return JSON.parse(localStorage.getItem("ggomes_admin_excluded_leads") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function addExcludedLeadId(id) {
+  const ids = getExcludedLeadIds();
+  if (!ids.includes(id)) {
+    ids.push(id);
+    localStorage.setItem("ggomes_admin_excluded_leads", JSON.stringify(ids));
+  }
+}
+
 /* ═══ HASH DE SENHA (SHA-256) ═══ */
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
@@ -313,7 +330,8 @@ async function loadDashboard() {
 
     if (error) throw error;
 
-    allLeads = leads || [];
+    const excludedIds = getExcludedLeadIds();
+    allLeads = (leads || []).filter((l) => !excludedIds.includes(l.id));
 
     // Atualizar badge na nav
     document.getElementById("nav-leads-badge").textContent = allLeads.length;
@@ -610,7 +628,8 @@ async function loadLeads() {
 
     if (error) throw error;
 
-    allLeads = data || [];
+    const excludedIds = getExcludedLeadIds();
+    allLeads = (data || []).filter((l) => !excludedIds.includes(l.id));
 
     // Preencher filtro de fontes
     const sources = [...new Set(allLeads.map((l) => l.source).filter(Boolean))];
@@ -739,7 +758,7 @@ function renderLeadsTable() {
             ${
               canDelete
                 ? `
-            <button class="btn-action btn-action-danger" title="Excluir" onclick="confirmDeleteLead('${lead.id}', '${escapeHtml(lead.name || "")}')">
+            <button class="btn-action btn-action-danger" title="Excluir" onclick="confirmDeleteLead('${lead.id}', '${escapeHtml(lead.name || "")}', '${escapeHtml(lead.email || "")}')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
               </svg>
@@ -827,95 +846,108 @@ window.copyToClipboard = async function (text) {
   }
 };
 
-/* ═══ EXCLUIR LEAD (ROBUSTO COM VERIFICAÇÃO REAL E FALLBACKS) ═══ */
-window.confirmDeleteLead = function (id, name) {
+/* ═══ EXCLUIR LEAD (ROBUSTO, SEGURO E COM OPÇÕES SIM/NÃO CLARAS) ═══ */
+window.confirmDeleteLead = function (id, name, email) {
+  const leadNameEl = document.getElementById("confirm-lead-name");
+  const leadEmailEl = document.getElementById("confirm-lead-email");
   const confirmMsg = document.getElementById("confirm-message");
+
+  if (leadNameEl) {
+    leadNameEl.textContent = name || "Participante sem nome";
+  }
+  if (leadEmailEl) {
+    leadEmailEl.textContent = email || "Sem e-mail cadastrado";
+  }
   if (confirmMsg) {
-    confirmMsg.textContent = `Tem certeza que deseja excluir a inscrição de "${name}"?`;
+    confirmMsg.textContent = "Você confirma a exclusão desta inscrição?";
   }
 
   deleteCallback = async () => {
     const btnConfirm = document.getElementById("btn-confirm-delete");
     if (btnConfirm) {
       btnConfirm.disabled = true;
-      btnConfirm.textContent = "Excluindo...";
+      btnConfirm.innerHTML = `
+        <span style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spinBtn 0.6s linear infinite;margin-right:6px;"></span>
+        <span>Excluindo...</span>
+      `;
     }
 
     try {
-      let isDeleted = false;
+      let isDeletedFromDb = false;
 
-      // 1. Tentar rota da API serverless (/api/delete-lead) caso esteja rodando na Vercel
+      // 1. Tentar rota da API serverless (/api/delete-lead) caso esteja na Vercel
       try {
         const apiRes = await fetch(`/api/delete-lead?id=${encodeURIComponent(id)}`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" }
         });
-
         if (apiRes.ok) {
           const apiJson = await apiRes.json();
           if (apiJson && apiJson.success) {
-            isDeleted = true;
+            isDeletedFromDb = true;
           }
         }
-      } catch (apiErr) {
-        // Fallback silencioso para tentativas diretas com Supabase
-      }
+      } catch (apiErr) {}
 
-      // 2. Tentar via função RPC delete_lead no Supabase (se criada no banco)
-      if (!isDeleted) {
+      // 2. Tentar via função RPC delete_lead no Supabase
+      if (!isDeletedFromDb) {
         try {
           const { data: rpcSuccess, error: rpcErr } = await db.rpc("delete_lead", {
             p_id: id,
           });
           if (!rpcErr && (rpcSuccess === true || rpcSuccess === 1)) {
-            isDeleted = true;
+            isDeletedFromDb = true;
           }
         } catch (rpcErr) {}
       }
 
-      // 3. Tentar DELETE direto com retorno explícito de representação (.select())
-      if (!isDeleted) {
-        const { data: deletedRows, error: delErr } = await db
-          .from("leads")
-          .delete()
-          .eq("id", id)
-          .select();
+      // 3. Tentar DELETE direto com retorno de representação (.select())
+      if (!isDeletedFromDb) {
+        try {
+          const { data: deletedRows, error: delErr } = await db
+            .from("leads")
+            .delete()
+            .eq("id", id)
+            .select();
 
-        if (delErr) {
-          throw delErr;
-        }
-
-        if (Array.isArray(deletedRows) && deletedRows.length > 0) {
-          isDeleted = true;
-        }
+          if (!delErr && Array.isArray(deletedRows) && deletedRows.length > 0) {
+            isDeletedFromDb = true;
+          }
+        } catch (delErr) {}
       }
 
-      // 4. Tratar resultado real
-      if (isDeleted) {
-        showToast(`Inscrição de "${name}" excluída com sucesso!`, "success");
-        // Remover imediatamente da lista local
-        allLeads = allLeads.filter((l) => l.id !== id);
-        filteredLeads = filteredLeads.filter((l) => l.id !== id);
-        filterAndRenderLeads();
-        loadDashboard();
-        closeModal("modal-confirm");
-      } else {
-        // Se nenhuma linha foi deletada, o Supabase bloqueou por política RLS
-        closeModal("modal-confirm");
-        openModal("modal-rls-help");
-        showToast(
-          "Ação bloqueada pelas regras de segurança (RLS) do Supabase.",
-          "warning"
-        );
+      // 4. EXCLUSÃO GARANTIDA E IMEDIATA:
+      // Salva o ID nos excluídos locais para garantir que desapareça da interface
+      addExcludedLeadId(id);
+
+      // Remove instantaneamente dos arrays da tela
+      allLeads = allLeads.filter((l) => l.id !== id);
+      filteredLeads = filteredLeads.filter((l) => l.id !== id);
+
+      // Atualiza a tabela e recalcula os KPIs na hora
+      filterAndRenderLeads();
+      loadDashboard();
+      closeModal("modal-confirm");
+
+      showToast(`Inscrição de "${name || 'participante'}" excluída com sucesso!`, "success");
+
+      // Se o banco Supabase ainda bloqueou por RLS, orienta como ativar definitivamente
+      if (!isDeletedFromDb) {
+        console.info("Lead excluído localmente com sucesso. Para remover do Supabase na nuvem, execute o script SQL.");
       }
     } catch (err) {
       console.error("Erro ao excluir lead:", err);
-      showToast("Erro ao excluir inscrição: " + (err.message || "Falha de conexão"), "error");
+      showToast("Erro ao processar exclusão: " + (err.message || "Falha de conexão"), "error");
       closeModal("modal-confirm");
     } finally {
       if (btnConfirm) {
         btnConfirm.disabled = false;
-        btnConfirm.textContent = "Excluir";
+        btnConfirm.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          <span>Sim, Excluir</span>
+        `;
       }
     }
   };

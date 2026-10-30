@@ -433,22 +433,49 @@
 
 
   <!-- ═══════════════════════════════════════════════════════════════
-       MODAL: CONFIRMAÇÃO DE EXCLUSÃO
+       MODAL: CONFIRMAÇÃO DE EXCLUSÃO (POSICIONAMENTO E BOTÕES SIM/NÃO)
        ═══════════════════════════════════════════════════════════════ -->
-  <div id="modal-confirm" class="modal" style="display:none">
+  <div id="modal-confirm" class="modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
     <div class="modal-overlay" data-close-modal="modal-confirm"></div>
-    <div class="modal-content modal-sm">
+    <div class="modal-content modal-confirm-card">
       <div class="modal-header modal-header-danger">
-        <h3>Confirmar Exclusão</h3>
-        <button class="modal-close" data-close-modal="modal-confirm" aria-label="Fechar">&times;</button>
+        <div class="modal-title-with-icon">
+          <div class="modal-danger-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>
+            </svg>
+          </div>
+          <h3 id="confirm-modal-title">Confirmar Exclusão</h3>
+        </div>
+        <button class="modal-close" data-close-modal="modal-confirm" aria-label="Fechar pop-up">&times;</button>
       </div>
+
       <div class="modal-body">
-        <p id="confirm-message">Tem certeza que deseja excluir este item?</p>
-        <p class="text-muted">Esta ação não pode ser desfeita.</p>
+        <p class="confirm-question" id="confirm-message">Você confirma a exclusão desta inscrição?</p>
+        
+        <div class="lead-delete-preview" id="lead-delete-preview">
+          <div class="lead-preview-name" id="confirm-lead-name">Nome do Inscrito</div>
+          <div class="lead-preview-email" id="confirm-lead-email">email@exemplo.com</div>
+        </div>
+
+        <p class="confirm-warning">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>Esta ação é irreversível e removerá o participante do evento.</span>
+        </p>
       </div>
-      <div class="modal-actions">
-        <button type="button" class="btn-secondary" data-close-modal="modal-confirm">Cancelar</button>
-        <button type="button" class="btn-danger" id="btn-confirm-delete">Excluir</button>
+
+      <div class="modal-actions modal-actions-confirm">
+        <button type="button" class="btn-cancel" data-close-modal="modal-confirm" id="btn-cancel-delete">
+          <span>Não, Cancelar</span>
+        </button>
+        <button type="button" class="btn-confirm-delete" id="btn-confirm-delete">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          <span>Sim, Excluir</span>
+        </button>
       </div>
     </div>
   </div>
