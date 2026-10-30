@@ -669,7 +669,7 @@
       <!-- Section Header -->
       <div class="text-center mb-16 animate-on-scroll">
         <h2 class="text-3xl md:text-4xl font-semibold text-white tracking-tight mb-4">Garanta Sua <span class="text-[#196420]">Vaga</span></h2>
-        <p class="text-[#196420] text-sm max-w-md mx-auto">Vagas limitadas. Inscreva-se agora e faça parte do evento que vai redefinir o futuro da sua empresa.</p>
+        <p id="signup-subtitle" class="text-[#196420] text-sm max-w-md mx-auto transition-colors duration-300">Vagas limitadas. Inscreva-se agora e faça parte do evento que vai redefinir o futuro da sua empresa.</p>
       </div>
 
       <!-- Form Card -->
@@ -710,6 +710,36 @@
           </div>
           <h3 class="text-2xl font-semibold text-white mb-2">Inscrição Confirmada!</h3>
           <p class="text-neutral-400 text-sm">Você receberá todas as informações por e-mail em breve.</p>
+        </div>
+
+        <!-- Limit Reached State (quando atinge 110 inscritos) -->
+        <div id="form-closed" class="form-closed">
+          <div class="limit-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            </svg>
+          </div>
+          <div class="mb-3">
+            <span class="limit-badge">LIMITE DE 110 VAGAS ATINGIDO</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-semibold text-white mb-3">Inscrições Encerradas</h3>
+          <p class="text-neutral-300 text-sm md:text-base leading-relaxed max-w-md mx-auto mb-6">
+            A capacidade máxima de <strong>110 participantes</strong> para o G.Gomes Day 2026 foi atingida.
+          </p>
+          <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-5 max-w-md mx-auto mb-6 text-left">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+              <p class="text-xs uppercase tracking-wider text-amber-400 font-semibold">Lista de Espera & Novas Vagas</p>
+            </div>
+            <p class="text-xs text-neutral-300 leading-relaxed">
+              Para verificar a liberação de novas vagas ou incluir seu nome na lista de espera, por favor <strong>procure o realizador do evento</strong> (G.Gomes Contabilidade).
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#about" class="btn-secondary h-[48px] px-6 text-xs uppercase tracking-wider">
+              <span>Conhecer o Realizador</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

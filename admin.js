@@ -18,6 +18,7 @@ const ITEMS_PER_PAGE = 15;
 let sortColumn = "created_at";
 let sortDirection = "desc";
 let deleteCallback = null;
+const MAX_INSCRICOES = 110;
 
 /* ═══ HASH DE SENHA (SHA-256) ═══ */
 async function sha256(message) {
@@ -336,6 +337,40 @@ async function loadDashboard() {
     animateValue("kpi-today", todayCount);
     animateValue("kpi-week", weekCount);
     animateValue("kpi-sources", sources.size);
+
+    // Atualizar barra de progresso do limitador de 110 vagas
+    const progressBar = document.getElementById("kpi-progress-bar");
+    const limitPill = document.getElementById("kpi-limit-pill");
+    const capacityBanner = document.getElementById("capacity-alert-banner");
+    const capacityDesc = document.getElementById("capacity-alert-desc");
+    
+    const totalCount = allLeads.length;
+    const percentage = Math.min(Math.round((totalCount / MAX_INSCRICOES) * 100), 100);
+
+    if (progressBar) {
+      progressBar.style.width = `${percentage}%`;
+      progressBar.classList.remove("warning", "danger");
+      if (totalCount >= MAX_INSCRICOES) {
+        progressBar.classList.add("danger");
+      } else if (totalCount >= MAX_INSCRICOES * 0.85) {
+        progressBar.classList.add("warning");
+      }
+    }
+
+    if (limitPill) {
+      limitPill.textContent = `/ ${MAX_INSCRICOES} vagas (${percentage}%)`;
+    }
+
+    if (capacityBanner) {
+      if (totalCount >= MAX_INSCRICOES) {
+        capacityBanner.style.display = "flex";
+        if (capacityDesc) {
+          capacityDesc.textContent = `A capacidade máxima de 110 participantes foi atingida (${totalCount} inscritos). O formulário da landing page está bloqueando novas inscrições e orientando os interessados a procurar o realizador do evento.`;
+        }
+      } else {
+        capacityBanner.style.display = "none";
+      }
+    }
 
     // Gráfico
     drawChart(allLeads);
@@ -792,23 +827,99 @@ window.copyToClipboard = async function (text) {
   }
 };
 
-/* ═══ EXCLUIR LEAD ═══ */
+/* ═══ EXCLUIR LEAD (ROBUSTO COM VERIFICAÇÃO REAL E FALLBACKS) ═══ */
 window.confirmDeleteLead = function (id, name) {
-  document.getElementById(
-    "confirm-message"
-  ).textContent = `Tem certeza que deseja excluir a inscrição de "${name}"?`;
+  const confirmMsg = document.getElementById("confirm-message");
+  if (confirmMsg) {
+    confirmMsg.textContent = `Tem certeza que deseja excluir a inscrição de "${name}"?`;
+  }
+
   deleteCallback = async () => {
+    const btnConfirm = document.getElementById("btn-confirm-delete");
+    if (btnConfirm) {
+      btnConfirm.disabled = true;
+      btnConfirm.textContent = "Excluindo...";
+    }
+
     try {
-      const { error } = await db.from("leads").delete().eq("id", id);
-      if (error) throw error;
-      showToast("Inscrição excluída com sucesso", "success");
-      loadLeads();
-      loadDashboard();
+      let isDeleted = false;
+
+      // 1. Tentar rota da API serverless (/api/delete-lead) caso esteja rodando na Vercel
+      try {
+        const apiRes = await fetch(`/api/delete-lead?id=${encodeURIComponent(id)}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" }
+        });
+
+        if (apiRes.ok) {
+          const apiJson = await apiRes.json();
+          if (apiJson && apiJson.success) {
+            isDeleted = true;
+          }
+        }
+      } catch (apiErr) {
+        // Fallback silencioso para tentativas diretas com Supabase
+      }
+
+      // 2. Tentar via função RPC delete_lead no Supabase (se criada no banco)
+      if (!isDeleted) {
+        try {
+          const { data: rpcSuccess, error: rpcErr } = await db.rpc("delete_lead", {
+            p_id: id,
+          });
+          if (!rpcErr && (rpcSuccess === true || rpcSuccess === 1)) {
+            isDeleted = true;
+          }
+        } catch (rpcErr) {}
+      }
+
+      // 3. Tentar DELETE direto com retorno explícito de representação (.select())
+      if (!isDeleted) {
+        const { data: deletedRows, error: delErr } = await db
+          .from("leads")
+          .delete()
+          .eq("id", id)
+          .select();
+
+        if (delErr) {
+          throw delErr;
+        }
+
+        if (Array.isArray(deletedRows) && deletedRows.length > 0) {
+          isDeleted = true;
+        }
+      }
+
+      // 4. Tratar resultado real
+      if (isDeleted) {
+        showToast(`Inscrição de "${name}" excluída com sucesso!`, "success");
+        // Remover imediatamente da lista local
+        allLeads = allLeads.filter((l) => l.id !== id);
+        filteredLeads = filteredLeads.filter((l) => l.id !== id);
+        filterAndRenderLeads();
+        loadDashboard();
+        closeModal("modal-confirm");
+      } else {
+        // Se nenhuma linha foi deletada, o Supabase bloqueou por política RLS
+        closeModal("modal-confirm");
+        openModal("modal-rls-help");
+        showToast(
+          "Ação bloqueada pelas regras de segurança (RLS) do Supabase.",
+          "warning"
+        );
+      }
     } catch (err) {
       console.error("Erro ao excluir lead:", err);
-      showToast("Erro ao excluir inscrição", "error");
+      showToast("Erro ao excluir inscrição: " + (err.message || "Falha de conexão"), "error");
+      closeModal("modal-confirm");
+    } finally {
+      if (btnConfirm) {
+        btnConfirm.disabled = false;
+        btnConfirm.textContent = "Excluir";
+      }
     }
   };
+
   openModal("modal-confirm");
 };
 
@@ -1054,15 +1165,32 @@ window.confirmDeleteUser = function (id, name) {
 
 /* ═══ CONFIRMAÇÃO ═══ */
 function initConfirmModal() {
-  document
-    .getElementById("btn-confirm-delete")
-    .addEventListener("click", () => {
+  const btnDelete = document.getElementById("btn-confirm-delete");
+  if (btnDelete) {
+    btnDelete.addEventListener("click", async () => {
       if (deleteCallback) {
-        deleteCallback();
+        const callback = deleteCallback;
         deleteCallback = null;
+        await callback();
+      } else {
+        closeModal("modal-confirm");
       }
-      closeModal("modal-confirm");
     });
+  }
+
+  // Botão de copiar script SQL para o Supabase
+  const btnCopySql = document.getElementById("btn-copy-rls-sql");
+  if (btnCopySql) {
+    btnCopySql.addEventListener("click", async () => {
+      const sqlCode = document.getElementById("rls-sql-code")?.textContent || "";
+      try {
+        await navigator.clipboard.writeText(sqlCode);
+        showToast("Comando SQL copiado com sucesso!", "success");
+      } catch {
+        showToast("Selecione o texto acima e copie manualmente.", "info");
+      }
+    });
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════

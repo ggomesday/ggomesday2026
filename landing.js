@@ -9,6 +9,7 @@
 const SUPABASE_URL = "https://mpxqdabkmhlzdwweuikk.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Qp8JrbQYrylukDb6UuFRIQ_IyKorZNV";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const MAX_INSCRICOES = 110;
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -89,6 +90,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  // ── Verificação de Limite de Inscrições (110 Vagas) ──
+  async function checkInscricoesLimit() {
+    try {
+      const { count, error } = await supabaseClient
+        .from('leads')
+        .select('*', { count: 'exact', head: true });
+
+      if (error) {
+        console.warn("Aviso ao consultar total de inscritos:", error);
+        return false;
+      }
+
+      if (typeof count === 'number' && count >= MAX_INSCRICOES) {
+        applyLimitReachedState(count);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.warn("Erro ao checar limite de vagas:", err);
+      return false;
+    }
+  }
+
+  function applyLimitReachedState(currentCount) {
+    const formContent = document.getElementById("form-content");
+    const formClosed = document.getElementById("form-closed");
+    const signupSubtitle = document.getElementById("signup-subtitle");
+
+    if (formContent) {
+      formContent.style.display = "none";
+    }
+    if (formClosed) {
+      formClosed.classList.add("show");
+    }
+    if (signupSubtitle) {
+      signupSubtitle.textContent = "Limite de 110 vagas atingido. Inscrições pelo site encerradas.";
+      signupSubtitle.style.color = "#f59e0b";
+    }
+
+    // Atualizar botões de CTA da página
+    document.querySelectorAll('a[href="#signup"]').forEach((btn) => {
+      const span = btn.querySelector("span");
+      if (span && (span.textContent.toLowerCase().includes("vaga") || span.textContent.toLowerCase().includes("participar"))) {
+        span.textContent = "Vagas Esgotadas";
+      }
+    });
+  }
+
   // ── 5. Form Handling ──
   function initForm() {
     const form = document.getElementById("signup-form");
@@ -129,7 +178,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        // Enviar para o Supabase
+        // 1. Verificação preventiva: Checar se o limite de 110 inscritos foi atingido
+        try {
+          const { count, error: countErr } = await supabaseClient
+            .from('leads')
+            .select('*', { count: 'exact', head: true });
+
+          if (!countErr && typeof count === 'number' && count >= MAX_INSCRICOES) {
+            applyLimitReachedState(count);
+            alert("Atenção: A capacidade máxima de 110 inscrições acabou de ser atingida! Por favor, procure o realizador do evento.");
+            return;
+          }
+        } catch (limitErr) {
+          console.warn("Aviso ao checar limite no envio:", limitErr);
+        }
+
+        // 2. Enviar para o Supabase
         const { error } = await supabaseClient
           .from('leads')
           .insert([
@@ -293,6 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ── Initialize All ──
+  checkInscricoesLimit();
   initScrollAnimations();
   initSmoothScroll();
   initNavbarScroll();

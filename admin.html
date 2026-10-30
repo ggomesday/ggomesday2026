@@ -177,6 +177,22 @@
 
       <!-- ═══ VIEW: DASHBOARD ═══ -->
       <section id="view-dashboard" class="view active">
+
+        <!-- Banner de Alerta de Limite de Vagas -->
+        <div id="capacity-alert-banner" class="capacity-alert-banner" style="display:none">
+          <div class="capacity-alert-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="capacity-alert-content">
+            <strong id="capacity-alert-title">Limite de Inscrições Atingido (110 Vagas)!</strong>
+            <p id="capacity-alert-desc">A capacidade máxima de 110 participantes foi atingida. Novas tentativas na landing page serão bloqueadas e orientadas a procurar o realizador do evento.</p>
+          </div>
+        </div>
+
         <div class="kpi-grid">
           <div class="kpi-card kpi-total">
             <div class="kpi-icon-wrap">
@@ -187,8 +203,14 @@
               </svg>
             </div>
             <div class="kpi-data">
-              <span class="kpi-value" id="kpi-total">—</span>
+              <div class="kpi-value-row">
+                <span class="kpi-value" id="kpi-total">—</span>
+                <span class="kpi-limit-pill" id="kpi-limit-pill">/ 110 vagas</span>
+              </div>
               <span class="kpi-label">Total de Inscritos</span>
+              <div class="kpi-progress-bar-wrap" title="Progresso das vagas">
+                <div class="kpi-progress-bar" id="kpi-progress-bar" style="width: 0%"></div>
+              </div>
             </div>
           </div>
 
@@ -431,6 +453,38 @@
     </div>
   </div>
 
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MODAL: AJUDA RLS SUPABASE (HABILITAR EXCLUSÃO)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div id="modal-rls-help" class="modal" style="display:none">
+    <div class="modal-overlay" data-close-modal="modal-rls-help"></div>
+    <div class="modal-content modal-md">
+      <div class="modal-header modal-header-warning">
+        <h3>Habilitar Exclusão no Supabase</h3>
+        <button class="modal-close" data-close-modal="modal-rls-help" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>O Supabase bloqueou a exclusão porque a política de segurança (Row Level Security - RLS) na tabela <strong>leads</strong> ainda não permite exclusões.</p>
+        <p class="text-sm text-muted mt-2">Para liberar a exclusão permanente no painel, copie o comando abaixo e execute-o no <strong>SQL Editor</strong> do seu Supabase:</p>
+        <div class="code-box-wrapper">
+          <pre class="code-box" id="rls-sql-code">CREATE POLICY "Permitir exclusao de leads"
+ON public.leads
+FOR DELETE
+TO anon, authenticated
+USING (true);</pre>
+          <button type="button" class="btn-copy-code" id="btn-copy-rls-sql">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copiar SQL</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" data-close-modal="modal-rls-help">Fechar</button>
+        <a href="https://supabase.com/dashboard" target="_blank" rel="noopener" class="btn-primary">Abrir Supabase</a>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ TOAST NOTIFICATIONS ═══ -->
   <div id="toast-container" class="toast-container"></div>
